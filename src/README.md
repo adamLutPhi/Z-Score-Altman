@@ -29,3 +29,5 @@ hence, this model is, by no means, unrealistic for the real world
 you can access the license from here
 
 ## Disclaimer
+this is for educational purposes only
+The author is not held responsibaly, at all costs
