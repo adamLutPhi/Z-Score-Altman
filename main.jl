@@ -1,35 +1,39 @@
 # TODO: Altman's z score - WIP
-
-global message = "Please enter "
+ global message = "Please enter "
 
 function altmanCoeffs(currentAssets,currentLiabilities,totalAssets,
     retainedEarnings,earnings,capital,totalLiabilities,sales )
+
  #finished currentliabilities
 
-#=
-non-current liabilities
+#---
+# non-current liabilities
 
 current Assets prompt
 
-magical Liabilities + Assets =  Capital
+# magical formula: Liabilities + Assets =  Capital
 
 #total Assets prompt
 
 #total Liabilities
 
-=#
 
     return
 
 end
+=#
 
+=
 #=
 CheatSheet:
 
 totalAssets goes into: X1, X2, X3, & X5
-=#
 
-print("welcome to Altman z-score Julia Edition!\n")
+
+=#
+print("hello World!\n")
+print("welcome to Altman z-score - Julia Edition!\n")
+
 notespayable = input("please enter 'Notes Payable'")
 accountspayable = input("please enter 'Accounts Payable'")
 
@@ -40,12 +44,12 @@ print("Working Capital is: $ $workingCapital !")
 
 
 #= X1 = working Capital / total assets
-needs to be shown
+ TODO: working Capital needs to be shown
 currentAssets: any asset that will
 provide an economic value for or
  within one year
  =#
-
+#=
 X1 = workingCapital / totalAssets
 
 # X2 = retained earnings / total assets
@@ -63,13 +67,37 @@ X4 = capital / totalLiabilities
 
 X5 = sales / totalAssets
 
-return X1,X2,X3,X4,X5
+return X1,X2,X3,X4,X5  - #wishful thinking
 end
+
+=#
+module findtheThird
+function calcCapital(totalLiabilites,totalAssets)
+asset = abs(totalAssets) ; liability = abs(totalLiabilites)
+#return max(asset, liability) - min(asset, liability)
+return asset - liability
+end
+function calcAssets(totalCapital, totalLiabilities)
+capital = abs(totalCapital);liability = abs(totalLiabilities)
+#return max(capital, liability) - min(capital, liability)
+return capital - liability
+end
+function calcLiabilities(totalAssets,totalCapital)
+    #here, we do NOT Know which is larger; Utilize Min, max
+    asset = abs(totalAssets); capital = abs(totalCapital);
+    return max(asset, capital) - min(asset, capital)
+end
+#---
 
 #notesPayable, accountsPayable, accruedExpense,unearnedRevenue, longtermDebt
 function currentliabilities()
     """
-    calculates different short-term liabilitues below 1 year
+    calculates different short-term liabilitues below 1 year:
+    1. Notes Payable
+    2. Accounts Payable
+    3. Accrued Expense
+    4. Unearned Revenue
+    5. Long-term Debt
     """
 # message = "Please enter "
     notesPayable = tryparse(Number, input("$message 'Notes Payable'\n"))
@@ -80,7 +108,6 @@ function currentliabilities()
 
     return  notesPayable + accountsPayable + accruedExpense + unearnedRevenue + longtermDebt
 end
-
 
 function currentassets() # returns Number
     """
@@ -102,12 +129,45 @@ function currentassets() # returns Number
     treasuryNotes = tryparse(Number, input("$message 'Treasury Notes'\n"))
     other = tryparse(Number, input("$message 'Other'\n"))
     return  accountsReceivable + inventory + securities + commercialPaper +
-    treasuryNotes + other
+            treasuryNotes + other
 end
 #done currentAssets
 
-workingCapital = curr
+function currentWorkingCapital()
+cassets = currentassets()
+cliabilities = currentliabilities()
+cassets > cliabilities ? workingCapital = cassets - cliabilities  : workingCapital is nothing
+#returns working Capital
 
+return workingCapital
+end # returns workingCapital
+
+
+#---
+#totalAssets = depreciation
+
+
+
+
+
+#---
+
+X1(totalAssets) = workingCapital / totalAssets
+
+# X2 = retained earnings / total assets
+
+X2(totalAssets) = retainedEarnings / totalAssets
+
+# X3 = earnings / total assets
+X3(totalAssets) = earnings / totalAssets
+
+# X4 = equity(capital) / total liabilities
+
+X4() = capital / totalLiabilities
+
+# X5 = sales / total assets
+
+X5() = sales / totalAssets
 
 
 ##sanity check & test later
@@ -138,9 +198,7 @@ current #done
 -noncurrent
 #prompt
 
-
 TODO: Assets
-
 current Assets =
 
 Current assets = Cash and Cash Equivalents +
@@ -150,21 +208,17 @@ Current assets = Cash and Cash Equivalents +
 4.  Commercial Paper,
 5.  Treasury notes,
 6.  Other Instruments
-
-
 =#
-
-
 end
 
 parsing()
 function currentAssets ()
-accountsReceivable = tryparse(Number , input( "$accountsReceivable  " ) )
-inventory = tryparse(Number , input( "$inventory  " ) )
-Securities = tryparse(Number , input( "$Securities  " ) )
-commercialPaper = tryparse(Number , input( "$commercialPaper  " ) )
-treasuryNotes = tryparse(Number , input( "$TreasuryNotes  " ) )
-other = tryparse(Number , input( "$other " ) )
+accountsReceivable = tryparse(Number , input( "$accountsReceivable" ) )
+inventory = tryparse(Number , input( " $inventory" ) )
+Securities = tryparse(Number , input( " $Securities" ) )
+commercialPaper = tryparse(Number , input( " $commercialPaper" ) )
+treasuryNotes = tryparse(Number , input( " $TreasuryNotes" ) )
+other = tryparse(Number , input( " $other " ) )
 end
 
 
