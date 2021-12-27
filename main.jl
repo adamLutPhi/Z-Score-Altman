@@ -1,5 +1,6 @@
 # TODO: Altman's z score - WIP
 
+global message = "Please enter "
 
 function altmanCoeffs(currentAssets,currentLiabilities,totalAssets,
     retainedEarnings,earnings,capital,totalLiabilities,sales )
@@ -68,9 +69,9 @@ end
 #notesPayable, accountsPayable, accruedExpense,unearnedRevenue, longtermDebt
 function currentliabilities()
     """
-    calculates
+    calculates different short-term liabilitues below 1 year
     """
-message = "Please enter "
+# message = "Please enter "
     notesPayable = tryparse(Number, input("$message 'Notes Payable'\n"))
     accountsPayable = tryparse(Number, input("$message 'Accounts Payable'\n"))
     accruedExpense = tryparse(Number, input("$message 'Accrued Expense'\n"))
@@ -80,26 +81,55 @@ message = "Please enter "
     return  notesPayable + accountsPayable + accruedExpense + unearnedRevenue + longtermDebt
 end
 
-function currentAssets()
 
-message = "Please enter "
+function currentassets() # returns Number
+    """
+    calculates short-term assets, below 1 year
+    Current assets = Cash and Cash Equivalents +
+    1. Accounts Receivable +
+    2. Inventory +
+    3. Marketable Securities
+    4.  Commercial Paper,
+    5.  Treasury Notes,
+    6.  Other Instruments
+
+    """
+
+    accountsReceivable  = tryparse(Number, input("$message 'Accounts Receivable '\n"))
+    inventory = tryparse(Number, input("$message 'Inventory'\n"))
+    securities= tryparse(Number, input("$message 'Securities'\n"))
+    commercialPaper = tryparse(Number, input("$message 'Commercial Paper'\n"))
+    treasuryNotes = tryparse(Number, input("$message 'Treasury Notes'\n"))
+    other = tryparse(Number, input("$message 'Other'\n"))
+    return  accountsReceivable + inventory + securities + commercialPaper +
+    treasuryNotes + other
+end
+#done currentAssets
+
+workingCapital = curr
 
 
-return
+
+##sanity check & test later
+function parsing(message1, message2 ) #i.e. Number & string
+
+tryparse( typeof("$message1") , input("$message1 $message2 \n"))
+
+else
+    rethrow()
+
 end
 
+function oneLinerParsing(message1, message2)
 
+ if isstructtype(typeof("$message1")) ? : rethrow()
+end
 
 #=
 
 either
 
 A:
-
-TODO: Liabilities
-
-current Liabilities
-
 
 
 liabilities =
@@ -122,27 +152,28 @@ Current assets = Cash and Cash Equivalents +
 6.  Other Instruments
 
 
-
-
-
 =#
 
 
 end
 
+parsing()
 function currentAssets ()
-accountsReceivable =
-inventory =
-Securities =
-Commercial Paper=
-Treasury notes
-other = tryparse(Number , input( " " ) )
+accountsReceivable = tryparse(Number , input( "$accountsReceivable  " ) )
+inventory = tryparse(Number , input( "$inventory  " ) )
+Securities = tryparse(Number , input( "$Securities  " ) )
+commercialPaper = tryparse(Number , input( "$commercialPaper  " ) )
+treasuryNotes = tryparse(Number , input( "$TreasuryNotes  " ) )
+other = tryparse(Number , input( "$other " ) )
 end
+
+
 
 function parsing()
-tryparse(Number , input( " " ) )
+tryparse(Number, input("$messagevaue "))
 
 end
+
 
 
 
