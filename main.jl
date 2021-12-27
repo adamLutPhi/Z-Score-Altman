@@ -48,12 +48,13 @@ end
 
 #notesPayable, accountsPayable, accruedExpense,unearnedRevenue, longtermDebt
 function currentliabilities()
-message = "please enter "
-    notesPayable =  input("$message 'Notes Payable'\n")
-    accountsPayable = input("$message 'accounts Payable'\n")
-    accruedExpense = input("$message 'Accrued Expense'\n")
-    unearnedRevenue = input("$message 'Unearned Revenue'\n")
-    longtermDebt = input("$message 'Long-term Debt'\n")
+message = "Please enter "
+    notesPayable = tryparse(Number, input("$message 'Notes Payable'\n"))
+    accountsPayable = tryparse(Number, input("$message 'accounts Payable'\n"))
+    accruedExpense = tryparse(Number, input("$message 'Accrued Expense'\n"))
+    unearnedRevenue = tryparse(Number, input("$message 'Unearned Revenue'\n"))
+    longtermDebt = tryparse(Number, input("$message 'Long-term Debt'\n"))
+
     return  notesPayable + accountsPayable + accruedExpense + unearnedRevenue + longtermDebt
 end
 
