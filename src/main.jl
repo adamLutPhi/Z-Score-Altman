@@ -1,5 +1,6 @@
 # TODO: Altman's z score - WIP
- global message = "Please enter "
+global prompt = "Please enter "
+global message = ""
 
 #---
 function altmanCoeffs(a1=1.2 , a2=1.4 , a3=3.3 , a4=0.6 ,a5 = 0.999 )
@@ -67,12 +68,12 @@ function currentliabilities()
     """
     print("this function calculates different short-term liabilitues below 1 year:\n1. Notes Payable\n
 2. Accounts Payable\n3. Accrued Expense\n4. Unearned Revenue\n5. Long-term Debt\n")
-# message = "Please enter "
-    notesPayable = tryparse(Number, input("$message 'Notes Payable'\n"))
-    accountsPayable = tryparse(Number, input("$message 'Accounts Payable'\n"))
-    accruedExpense = tryparse(Number, input("$message 'Accrued Expense'\n"))
-    unearnedRevenue = tryparse(Number, input("$message 'Unearned Revenue'\n"))
-    longtermDebt = tryparse(Number, input("$message 'Long-term Debt'\n"))
+# prompt = "Please enter "
+    notesPayable = tryparse(Number, input("$prompt 'Notes Payable'\n"))
+    accountsPayable = tryparse(Number, input("$prompt 'Accounts Payable'\n"))
+    accruedExpense = tryparse(Number, input("$prompt 'Accrued Expense'\n"))
+    unearnedRevenue = tryparse(Number, input("$prompt 'Unearned Revenue'\n"))
+    longtermDebt = tryparse(Number, input("$prompt 'Long-term Debt'\n"))
 
     return  notesPayable + accountsPayable + accruedExpense + unearnedRevenue + longtermDebt
 end # returns currentLiabilities :: Number
@@ -90,12 +91,12 @@ function currentassets() # returns Number
 
     """
 
-    accountsReceivable  = tryparse(Number, input("$message 'Accounts Receivable '\n"))
-    inventory = tryparse(Number, input("$message 'Inventory'\n"))
-    securities= tryparse(Number, input("$message 'Securities'\n"))
-    commercialPaper = tryparse(Number, input("$message 'Commercial Paper'\n"))
-    treasuryNotes = tryparse(Number, input("$message 'Treasury Notes'\n"))
-    other = tryparse(Number, input("$message 'Other'\n"))
+    accountsReceivable  = tryparse(Number, input("$prompt 'Accounts Receivable '\n"))
+    inventory = tryparse(Number, input("$prompt 'Inventory'\n"))
+    securities= tryparse(Number, input("$prompt 'Securities'\n"))
+    commercialPaper = tryparse(Number, input("$prompt 'Commercial Paper'\n"))
+    treasuryNotes = tryparse(Number, input("$prompt 'Treasury Notes'\n"))
+    other = tryparse(Number, input("$prompt 'Other'\n"))
     return  accountsReceivable + inventory + securities + commercialPaper +
             treasuryNotes + other
 end
@@ -154,8 +155,14 @@ return workingCapital
 end # returns workingCapital
 
 
-#---
-#totalAssets = depreciation
+#--- z handling
+
+function z_handling(z)
+
+    if z > 2.99
+
+        return
+end
 
 
 
@@ -182,16 +189,20 @@ X5(sales, totalAssets) = sales / totalAssets
 
 
 ##sanity check & test later
-function parsing(message1, message2 ) #i.e. Number & string
+#= function parsing(message1, message2 ) #i.e. Number & string
 
-tryparse( typeof("$message1") , input("$message1 $message2 \n"))
-
+if isnumeric(
+     tryparse( typeof("$message1") , input("$message1 $message2 \n"))
+)
 else
-    rethrow()
+    throw() #rethrow()
 
 end
-
-function oneLinerParsing(message1, message2)
+end
+=#
+#---
+#done writing, needs testing
+function oneLinerParsing(message1, prompt2)
 
  if isstructtype(typeof("$message1")) ? : rethrow()
 end
@@ -222,7 +233,7 @@ Current assets = Cash and Cash Equivalents +
 =#
 end
 
-parsing()
+# parsing()
 function currentAssets ()
 accountsReceivable = tryparse(Number , input( "$accountsReceivable" ) )
 inventory = tryparse(Number , input( " $inventory" ) )
@@ -235,7 +246,7 @@ end
 
 
 function parsing()
-tryparse(Number, input("$messagevaue "))
+tryparse(Number, input("$promptvaue "))
 
 end
 
