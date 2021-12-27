@@ -10,12 +10,12 @@ this model assumes:
 -  All data are correct ( no scenario for data manipulation)
 -  No additional, Sudden Emergency Cash Inflows (i.e. Bank loans, or bonds )
 
-hence, this model is, by no means, unrealistic for the real world
+hence, this model is, by no means, realistic, or suitable for the real world
 
 ## Paper
 
 ```
-@misc{Chouhan.et.al2014aPredictingfinstability,
+@misc{Chouhan.et.al2014Predictingfinstability,
   title={Predicting financial stability of select BSE companies revisiting Altman Z score},
   author={Vineet Chouhan, Bibhas Chandra, Shubham Goswami},
   year={2014},
@@ -29,5 +29,5 @@ hence, this model is, by no means, unrealistic for the real world
 you can access the license from here
 
 ## Disclaimer
-this is for educational purposes only
-The author is not held responsibaly, at all costs
+this is for Educational purposes only
+The author is not held responsibale, at all costs
