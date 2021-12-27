@@ -2,12 +2,31 @@
 global prompt = "Please enter "
 global message = ""
 
-#---
+##=#  program main
+#CheatSheet:
+
+#totalAssets goes into: X1, X2, X3, & X5
+function main()
+
+print("hello World!\n")
+print("welcome to Altman z-score - Julia Edition!\n")
+
+end
+
+#--- Altman Coefficients a1, a2, ..., an
 function altmanCoeffs(a1=1.2 , a2=1.4 , a3=3.3 , a4=0.6 ,a5 = 0.999 )
-    return z = a1 * X1() + a2 * X2() + a3 * X3() + a4 * X4() + a5 * X5()
+    return z = a1 * X1(totalAssets,workingCapital)
+    +a2 * X2(totalAssets,retainedEarnings)
+    + a3 * X3(totalAssets,earnings)
+    + a4 * X4(capital, totalLiabilities) = capital / totalLiabilities
+    + a5 * X5(sales, totalAssets)
+
+#---
+# TODO:
+#=
 function altmanCoeffs(currentAssets,currentLiabilities,totalAssets,
     retainedEarnings,earnings,capital,totalLiabilities,sales )
-
+=#
  #finished currentliabilities
 
 
@@ -20,39 +39,37 @@ function altmanCoeffs(currentAssets,currentLiabilities,totalAssets,
 #total Assets prompt
 
 #total Liabilities
-    return
+#    return
 
-end
+#end
 ## ---
 module findtheThird
+
 function calcCapital(totalAssets,totalLiabilities)
 asset = abs(totalAssets) ; liability = abs(totalLiabilites)
 #return max(asset, liability) - min(asset, liability)
 return asset - liability
 end
+#---
+#capital Calculation
+#TODO: #Done!
+#"""user inserts  totalCapital"""
+global capital(totalCapital) = abs(totalCapital);
+global liability(totalLiabilities) = abs(totalLiabilities)
+#TODO: #Done!
 function calcAssets(totalCapital, totalLiabilities)
-capital = abs(totalCapital);liability = abs(totalLiabilities)
+capital = capital(totalCapital)
+liability = liability(totalLiabilities) = abs(totalLiabilities)
 #return max(capital, liability) - min(capital, liability)
 return capital - liability
 end
+#---
 function calcLiabilities(totalAssets,totalCapital)
     #here, we do NOT Know which is larger; Utilize Min, max
     asset = abs(totalAssets); capital = abs(totalCapital);
     return max(asset, capital) - min(asset, capital)
 end
 
-=#
-
-=
-#=
-CheatSheet:
-
-totalAssets goes into: X1, X2, X3, & X5
-
-
-=#
-print("hello World!\n")
-print("welcome to Altman z-score - Julia Edition!\n")
 
 #---
 
@@ -110,7 +127,7 @@ end
  currentLiabs = currentliabilities()
 currentAssets = input("please enter 'Current Assets' ")
 workingCapital =  calcCapital(currentAssets, currentLiabs)   # currentAssets - currentLiabs #requires currentLiabs
-print("Working Capital is: $ $workingCapital !")
+print("Working Capital is:  $workingCapital !")
 
 ##  ---
 #= X1 = working Capital / total assets
@@ -140,22 +157,35 @@ X5 = sales / totalAssets
 return X1,X2,X3,X4,X5  - #wishful thinking
 end
 
-=#
+=# #Well-DONE! #<- double-checked
 #--- Altman
+##Unsure Block ...
+#function altman(totalAssets, sales )
+function currentassets() #on-demand working function
+cassets   = typeparse(:Number, input("please enter Current Assets "))
+# null - nill chg to double
+return cassets
 
-function altman(totalAssets, sales )
+casset =  currentasset()
 
-function currentWorkingCapital()
-cassets = currentassets()
+end #correctly returns cAsserts ok
+
+cassets = currentassets() # q. from wher assets stem from (user input)
 cliabilities = currentliabilities()
-cassets > cliabilities ? workingCapital = cassets - cliabilities  : workingCapital is nothing
-#returns working Capital
 
+#function currentassets() = input()
+#input() Well-done?! -- i'm nut sure
+#--- #user
+function currentWorkingCapital()
+cassets > cliabilities ? workingCapital =
+cassets - cliabilities  : workingCapital isa nothing
+#returns working Capital
 return workingCapital
+
 end # returns workingCapital
 
 
-#--- z handling
+#--- z handling #TODO:
 
 function z_handling(z)
 
@@ -164,12 +194,8 @@ function z_handling(z)
         return
 end
 
-
-
-
-
-#---
-
+#--- Compact "assignment form":
+#TODO:
 X1(totalAssets,workingCapital) = workingCapital / totalAssets
 
 # X2 = retained earnings / total assets
@@ -187,6 +213,11 @@ X4(capital, totalLiabilities) = capital / totalLiabilities
 
 X5(sales, totalAssets) = sales / totalAssets
 
+####add here
+
+
+
+
 
 ##sanity check & test later
 #= function parsing(message1, message2 ) #i.e. Number & string
@@ -200,12 +231,12 @@ else
 end
 end
 =#
-#---
+#---Resear #TODO:Testing & Research
 #done writing, needs testing
-function oneLinerParsing(message1, prompt2)
 
- if isstructtype(typeof("$message1")) ? : rethrow()
-end
+#function oneLinerParsing(message1, prompt2)
+# if isstructtype(typeof("$message1")) ? : rethrow()
+#end
 
 #=
 
@@ -234,11 +265,14 @@ Current assets = Cash and Cash Equivalents +
 end
 
 # parsing()
-function currentAssets ()
-accountsReceivable = tryparse(Number , input( "$accountsReceivable" ) )
-inventory = tryparse(Number , input( " $inventory" ) )
-Securities = tryparse(Number , input( " $Securities" ) )
-commercialPaper = tryparse(Number , input( " $commercialPaper" ) )
+
+
+function currentAssets() #hides lots of mini functions
+accountsReceivable() = tryparse(Number , input( "$accountsReceivable" ) )
+inventory(:Number) = tryparse(Number , input( " $inventory" ) )
+Securities(:Number) = tryparse(Number , input( " $Securities" ) )
+commercialPaper(:Number) = tryparse(Number , input( " $commercialPaper" ) )
+treasuryNotes(:Number) = tryparse(Number , input( " $TreasuryNotes" ) )
 treasuryNotes = tryparse(Number , input( " $TreasuryNotes" ) )
 other = tryparse(Number , input( " $other " ) )
 end
@@ -251,13 +285,14 @@ tryparse(Number, input("$promptvaue "))
 end
 
 
-
-
 function altmanCoeffs()
 
 currentliabs = currentliabilities() #done
-noncurrentliabs =  tryparse(input("please input ") )
+noncurrentliabs =  tryparse(:Number ,input("please input Current Liabilities") )
 return
 end
 
 altmanCoeffs()
+
+
+end
