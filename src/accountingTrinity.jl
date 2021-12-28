@@ -30,11 +30,15 @@ together, they make up the following Golden (brown) Equation:
 ## Assets = Liabilites + Capital
 ## ---
 
-module findtheThird
+global capital(totalCapital) =abs(totalCapital);
+global asset(totalAssets) = abs(totalLiabilities)
+global liability(totalLiabilities) = abs(totalLiabilities)
 #nothing, yet - chop chop, gotta go, are you there yet, where you at!
-end
+
+
  #syntax: incomplete: "module" at /Users/ahmadlutfi/Desktop/src/src/accountingTrinity.jl:3 requires end
-#TODO: working input ref ...
+
+#TODO: working input ref ... # DONE!
 capital = input("please insert total $capital")  # insert a value only
 print("capital:   $capital") # TODO: Ignore Alpha words -- REGEX  - maybe later -- I guessed it
 #@assert capital >= 0
@@ -46,7 +50,8 @@ asset = abs(totalAssets);  liability = abs(totalLiabilites) #edit: I don't recal
 =#
 
 #return max(asset, liability) - min(asset, liability) #that's another thing I've been thinking about - to add or not the add -- that is the Question
-return asset - liability #
+capital = asset - liability # for some reason i have to check with liability ... #TODO:
+return capital # Capital
 end
 
 #---
@@ -54,19 +59,18 @@ end
 
 #TODO:calculate Asset  = capital - liability  #Done!
 #"""user inserts  totalCapital"""
-global capital(totalCapital) =abs(totalCapital);
-global liability(totalLiabilities) = abs(totalLiabilities)
-global asset(totalAssets) = abs(totalLiabilities)
-#TODO:finish  #Done! #2
 
+#TODO:finish
+"""
 function calcAssets(totalCapital, totalLiabilities)
 capital(totalCapital) = tryparse(:Number, input("please insert total Capital"))  # capital(totalCapital)
 liability(totalLiabilities) = tryparse(:Number, input("please insert total Liabilities")) #abs(totalLiabilities)
-#return max(capital, liability) - min(capital, liability)
-return capital - liability # Asset
+#TODO:
+            return max(capital, liability) - min(capital, liability)
+return capital - liability # = Asset
 end
 end
-
+"""
 #--- prompt Area
 #=
 using Parsers
@@ -81,23 +85,25 @@ read  = readline()
 
  #p = Parsers.DELIMITED(" ", ignorerepeated=true);
 =#
-
-#=
-....
+#--- ....
+#= TODO:READ - Someday, ok - getback -- on it
 function _sth parse(::Type{T}, s::AbstractString) where T
     y = tryparse(T, s)
     y === nothing && throw(ArgumentError("Cannot parse as $T: \"$s\""))
     return y
 end
 =#
+#--- Checking region ...
+# TODO: error with prompt #Done @ 6:15 pm
+function prompt(message="How are you feeling?") #Working: #getback: prompt's 2 methods prompt() & prompt(message)
 
-function prompt(message="How are you feeling?")
 print(message*"\n")
-line = readline() #read
+line = readline() #read # ok
 # splits on spaces and casts to T
 result = produce(map(x -> parse(T, x), split(line)))
-return result # parsebin(line)
-end
+# return #result
+return parsebin(line) #ok
+end #Done ! #Correct #checked #prompt(message)
 
 #---
 # num = parse(Number, line)
@@ -121,8 +127,8 @@ end
 #    return "$num"*" " *typeof(num)
 #else
 #end
-
-prompt("How are you feeling?") #it did NOT Prompt - I Swear it's over
+#TODO:Errors out - for some reason ....??? -What ...
+#prompt("How are you feeling?") #it did NOT Prompt - I Swear it's over
 
 #---  ap(x -> parse(T, x)
 #it's so calm - I hear nobody, oh wait, tere a a sound feels like mom's - is she back -- maybe it's my imagination
