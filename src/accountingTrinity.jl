@@ -20,11 +20,11 @@ the actual Owner: for whom the Account belongs to - usualy 1 or more Seperate en
 2. A couple, partnerships or best Friends (usually Spoils in, or before the end (whatever that means)  you know,  as nothing stands still on its own for good- hate to spoil that on you!) - but sb gotta spill the Beans, right ;) -- sb: somebody
 3. 3 ot more: fits the bill for  family-related  members  - [Time: for either long-term or short-term]
 
-3.Liabilities: Debt, ,or  shares (intl.) (if you're authorized to issue that ), given by other people willingly (hopefully they know what they're doing, right) i.e.  Accounts payable A/P  , me: the 'pay me back later, okay?' accounts  - [either long-term or short-term]
+3.Liabilities: Debt,  shares US ()(intl.) - how to say in the UK???(if you're authorized to issue that ), given by other people willingly (hopefully they know what they're doing, right) i.e.  Accounts payable A/P  , me: the 'pay me back later, okay?' accounts  - [either long-term or short-term]
 
 together, they make up the following Golden (brown) Equation:
 
-                Assets = Liabilites + Capital                     
+                Assets = Liabilites + Capital
 """
 # the Accounting Equation , :
 ## Assets = Liabilites + Capital
