@@ -285,11 +285,9 @@ end
 
 function altmanCoeffs()
 
-currentliabs = currentliabilities() #done
+currentliabs = currentliabilities() #done # omg my fave guitar : golden silver , soft & tender.. yes & no my true love s eye autumns comming  -- ive got to sing write my heart -focus
 noncurrentliabs =  tryparse(:Number ,input("please input Current Liabilities") )
-return
-end
-
+return # round  the burning circels , and then , the winter ....  # dislike please - golden sliver , all too soon - milk n honey, word & honeyyy# word * feels the cold weather]*
 altmanCoeffs()
 
 
