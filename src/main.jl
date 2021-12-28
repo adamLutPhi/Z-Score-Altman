@@ -187,11 +187,9 @@ end # returns workingCapital
 
 #--- z handling #TODO:
 
-function z_handling(z)
-
-    if z > 2.99
-
-        return
+function z_handling(z) # when will you do? - YO like right NOW??? -- lemme check wikipedia first
+    if z > 2.99 # CHECK num
+ return
 end
 
 #--- Compact "assignment form":
