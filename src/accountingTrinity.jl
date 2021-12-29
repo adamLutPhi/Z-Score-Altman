@@ -29,7 +29,7 @@ together, they make up the following Golden (brown) Equation:
 # the Accounting Equation , :
 ## Assets = Liabilites + Capital
 ## ---
-
+#existential question the function is already equal to its absolute value -talk about a Self-reference !
 global capital(totalCapital) =abs(totalCapital);
 global asset(totalAssets) = abs(totalLiabilities)
 global liability(totalLiabilities) = abs(totalLiabilities)
@@ -54,11 +54,12 @@ capital = asset - liability # for some reason i have to check with liability ...
 return capital # Capital
 end
 
-#---
-#capital Calculation
+#--- Asset Calculation
+#capital Calculation ?
 
 #TODO:calculate Asset  = capital - liability  #Done!
 #"""user inserts  totalCapital"""
+function calcAsset()
 
 #TODO:finish
 """
@@ -109,4 +110,61 @@ prompt() #gets lost: reason(type input variable)- i.e. is it Float64 ? --unsure:
 #what type of work around & remedyyou'll do
 #don't know what type of input user may enter  either string or number
 # if number, will it be complex - Problem
-#eill it be Float64 - no problem!
+#but. let  it be a  Float64 - no problem!
+
+
+
+using Test
+global digits= 10
+global datatype = nothing
+function inputHandling(T)
+ #--- test Region
+
+    for sign in ('-','+'), Im in ("i","j","im"), s1 in (""," "), s2 in (""," "), s3 in (""," "), s4 in (""," ")
+         for r in (1,0,-1), i in (1,0,-1),
+             n = Complex(r, sign == '+' ? i : -i)
+             s = string(s1, r, s2, sign, s3, i, Im, s4)
+             @test n === parse(Complex{Int}, s)
+             @test Complex(r) === parse(Complex{Int}, string(s1, r, s2))
+             @test Complex(0,i) === parse(Complex{Int}, string(s3, i, Im, s4))
+             for T in (Float64, BigFloat)
+                 nT = parse(Complex{T}, s)
+                 @test nT isa Complex{T}
+                 @test nT == n
+                 @test n == parse(Complex{T}, string(s1, r, ".0", s2, sign, s3, i, ".0", Im, s4))
+                 @test n*parse(T,"1e-3") == parse(Complex{T}, string(s1, r, "e-3", s2, sign, s3, i, "e-3", Im, s4))
+             end
+
+         end
+         for r in (-1.0,-1e-9,Inf,-Inf,NaN), i in (-1.0,-1e-9,Inf,NaN)
+    n = Complex(r, sign == '+' ? i : -i)
+    s = lowercase(string(s1, r, s2, sign, s3, i, Im, s4))
+    @test n === parse(ComplexF64, s)
+    @test Complex(r) === parse(ComplexF64, string(s1, r, s2))
+    @test Complex(0,i) === parse(ComplexF64, string(s3, i, Im, s4))
+end
+end
+end
+for T in (Int, Float64), bad in ("3 + 4*im", "3 + 4", "1+2ij", "1im-3im", "++4im")
+    @test_throws ArgumentError parse(Complex{T}, bad)
+end
+@test_throws ArgumentError parse(Complex{Int}, "3 + 4.2im")
+#test passed
+
+
+#--- T Handling #DONE
+
+if(typeof(T) isa Int)
+datatype = Int
+@inferred parse(Int, "$digits")
+# end
+elseif (typeof(T) isa Float64)
+    datatype = Float64
+@inferred parse(Float64, "$digits")
+#end
+elseif(typeof(T) isa Complex{Int})
+    datatype = Complex{Int}
+     @inferred parse(Complex{Int}, "$digits")
+end
+
+#you're in my head, Always....

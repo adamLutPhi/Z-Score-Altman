@@ -157,9 +157,15 @@ X5 = sales / totalAssets
 return X1,X2,X3,X4,X5  - #wishful thinking
 end
 
+Reality;
+
+TOTALAssets * (X1+X2()+X3()+X4()+X5())= workingCapital+ retainedEarnings+ earnings
++Capital*totalAssets /totalLiabilites + Sales
+
+
 =# #Well-DONE! #<- double-checked
 #--- Altman
-##Unsure Block ...
+##currentAssets Block
 #function altman(totalAssets, sales )
 function currentassets() #on-demand working function
 cassets   = typeparse(:Number, input("please enter Current Assets "))
@@ -265,19 +271,24 @@ end
 # parsing()
 
 
-function currentAssets() #hides lots of mini functions
+module currentAssets() #hides lots of mini functions
 accountsReceivable() = tryparse(Number , input( "$accountsReceivable" ) )
-inventory(:Number) = tryparse(Number , input( " $inventory" ) )
-Securities(:Number) = tryparse(Number , input( " $Securities" ) )
-commercialPaper(:Number) = tryparse(Number , input( " $commercialPaper" ) )
-treasuryNotes(:Number) = tryparse(Number , input( " $TreasuryNotes" ) )
-treasuryNotes = tryparse(Number , input( " $TreasuryNotes" ) )
-other = tryparse(Number , input( " $other " ) )
+inventory() = tryparse(Number , input( " $inventory" ) )
+Securities() = tryparse(Number , input( " $Securities" ) )
+commercialPaper() = tryparse(Number , input( " $commercialPaper" ) )
+treasuryNotes() = tryparse(Number , input( " $TreasuryNotes" ) )
+treasuryNotes() = tryparse(Number , input( " $TreasuryNotes" ) )
+other() = tryparse(Number , input( " $other " ) )
+
+function calccurrentAssets(args)
+ return    accountsReceivable() + inventory() + Securities()
++commercialPaper()+treasuryNotes() + other()
+end
 end
 
 
 
-function parsing()
+function parsing()#working
 tryparse(Number, input("$promptvaue "))
 
 end
