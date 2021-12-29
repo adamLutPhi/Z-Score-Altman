@@ -94,13 +94,19 @@ function _sth parse(::Type{T}, s::AbstractString) where T
 end
 =#
 #--- Checking region ...
-# TODO: error with prompt #Done @ 6:15 pm
+# TODO:  prompt #Done @ 6:15 pm
 function prompt(message="How are you feeling?") #Working: #getback: prompt's 2 methods prompt() & prompt(message)
 
 print(message*"\n")
-line = readline() #read # ok
+line = readline() #read # ok # string
 # splits on spaces and casts to T
-result = produce(map(x -> parse(T, x), split(line)))
+#result = produce(map(x -> parse(T, x), split(line)))
 # return #result
-return parsebin(line) #ok
+return parse(Complex,line) #ok
 end #Done ! #Correct #checked #prompt(message)
+prompt() #gets lost: reason(type input variable)- i.e. is it Float64 ? --unsure: the most existential questionyou might ask
+#oh my handling complex vars is complex (in itself!)
+#what type of work around & remedyyou'll do
+#don't know what type of input user may enter  either string or number
+# if number, will it be complex - Problem
+#eill it be Float64 - no problem!
