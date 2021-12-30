@@ -4,6 +4,7 @@ The Accounting Trinity or [CAL]!
 []: important (somehow) - it's objective alright
 (): optional read , acts as a comment
 me: personal words, to add an overall flavor & meaning to the comment itself - as needed
+A/C : Account - a fancy way accountants use for any account 'book'
 1.Assets k let's start - here goes nothing
 
 2.Capital :  an abstract entity me: i.e. bank account value- me: has a Direct Relation with either an 'Asset' or a Liability A/C "Account"
@@ -53,6 +54,16 @@ function calcCapital(asset, liability)
 #return max(asset, liability) - min(asset, liability) #that's another thing I've been thinking about - to add or not the add -- that is the Question
 capital = asset - liability # for some reason i have to check with liability ... #TODO:
 return capital # Capital
+
+function calcAsset(capital, liability)
+capital = asset - liability
+return capital
+end
+
+function calcLiability(capital, asset)
+liability  =   capital - asset
+return liability
+end
 end
 
 #--- Asset Calculation
@@ -60,7 +71,6 @@ end
 
 #TODO:calculate Asset  = capital - liability  #Done!
 #"""user inserts  totalCapital"""
-function calcAsset()
 
 #TODO:finish
 """
@@ -68,11 +78,41 @@ function calcAssets(totalCapital, totalLiabilities)
 capital(totalCapital) = tryparse(:Number, input("please insert total Capital"))  # capital(totalCapital)
 liability(totalLiabilities) = tryparse(:Number, input("please insert total Liabilities")) #abs(totalLiabilities)
 #TODO:
-            return max(capital, liability) - min(capital, liability)
+            return max(capital, liability) - min(capital, liability) #
 return capital - liability # = Asset
 end
 end
 """
+
+"
+Capital account v.s liability account
+
+Credit / debit   account algebra :
+
+Cr*Cr = Dr
+
+Dr*Dr = Dr
+
+(-): credit
+(+): debit
+
+Dr: Debit
+Cr: Credit
+
+liability account decrease could be from
+paying off Accounts Payable i.e. (-) Accounts Payable A/C [Credit Account] : (-)credit Accounts Payable A/C,
+decreasing(-) Accounts Payable A/C - Credit Account #whenever you Credit a   (-)credit account, that means you are Debiting (decreasing, here) the Credit Account i.e. Cr*Cr = Dr,
+adding(+) more Accounts Recievable (+) Accounts Recievable A/R [Debit Account] : (+)debit, Accounts Recieveble A/C - Debit Account (+)is debit #whenever you Debit a Debit account, means you
+i.e. some one is Paying you off Dr*Dr = Dr
+
+(-) Accounts Payable A/C
+
+"
+function calcAsset(totalCapital, totalLiabilities)
+
+
+
+end
 #--- prompt Area
 #=
 using Parsers
