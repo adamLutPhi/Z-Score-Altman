@@ -168,11 +168,11 @@ TOTALAssets * (X1+X2()+X3()+X4()+X5())= workingCapital+ retainedEarnings+ earnin
 ##currentAssets Block
 #function altman(totalAssets, sales )
 function currentassets() #on-demand working function
-cassets   = typeparse(:Number, input("please enter Current Assets "))
+cassets   = typeparse(:Number, input("please enter Current Assets "))#hard to believe sb knows current Assets #so fishy
 # null - nill chg to double
 return cassets
 
-casset =  currentasset()
+casset =  currentasset()#can't cappen in real life - mak=yebe in a purple parallel Universe
 
 end #correctly returns cAsserts ok
 
@@ -280,11 +280,24 @@ treasuryNotes() = tryparse(Number , input( " $TreasuryNotes" ) )
 treasuryNotes() = tryparse(Number , input( " $TreasuryNotes" ) )
 other() = tryparse(Number , input( " $other " ) )
 
-function calccurrentAssets(args)
+function calccurrentAssets() #args)
  return    accountsReceivable() + inventory() + Securities()
 +commercialPaper()+treasuryNotes() + other()
 end
 end
+
+
+function nonCurrentAssets() # working #"nonCurrentAssets")
+
+    return tryparse(Number , input( " nonCurrentAssets" ) )
+end
+
+function calAssets()
+calccurrentAssets() + nonCurrentAssets()
+end
+
+#end Assets -----
+
 
 
 
