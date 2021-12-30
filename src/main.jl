@@ -183,6 +183,10 @@ cliabilities = currentliabilities()
 #input() Well-done?! -- i'm nut sure
 #--- #user
 function currentWorkingCapital()
+    """
+    currentWorkingCapital cadlag (continue a droite limite a gauche) -i.e. en: contine to right, limit on the left --i.e. non-negative process definition
+    current Assets - current Liabilites
+    """
 cassets > cliabilities ? workingCapital =
 cassets - cliabilities  : workingCapital isa nothing
 #returns working Capital
