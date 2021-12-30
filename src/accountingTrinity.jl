@@ -49,6 +49,7 @@ function calcCapital(totalAssets,totalLiabilities)
 asset = abs(totalAssets);  liability = abs(totalLiabilites) #edit: I don't recall writing those , conciously -wow
 =#
 
+function calcCapital(asset, liability)
 #return max(asset, liability) - min(asset, liability) #that's another thing I've been thinking about - to add or not the add -- that is the Question
 capital = asset - liability # for some reason i have to check with liability ... #TODO:
 return capital # Capital
