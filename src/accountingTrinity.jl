@@ -41,6 +41,9 @@ global liability(totalLiabilities) = abs(totalLiabilities)
 
 #TODO: working input ref ... # DONE!
 capital = input("please insert total $capital")  # insert a value only
+liability = input("please insert total $liability")
+asset = input("please insert total $asset")
+
 print("capital:   $capital") # TODO: Ignore Alpha words -- REGEX  - maybe later -- I guessed it
 #@assert capital >= 0
 
@@ -52,10 +55,18 @@ asset = abs(totalAssets);  liability = abs(totalLiabilites) #edit: I don't recal
 
 function calcCapital(asset, liability)
 #return max(asset, liability) - min(asset, liability) #that's another thing I've been thinking about - to add or not the add -- that is the Question
+"""
+capital = asset - liability
+"""
 capital = asset - liability # for some reason i have to check with liability ... #TODO:
 return capital # Capital
 
 function calcAsset(capital, liability)
+"""
+asset =  - liability
+
+"""
+asset : asset <
 capital = asset - liability
 return capital
 end
@@ -63,7 +74,9 @@ end
 function calcLiability(capital, asset)
 liability  =   capital - asset
 return liability
+
 end
+
 end
 
 #--- Asset Calculation
