@@ -185,9 +185,9 @@ return workingCapital
 end # returns workingCapital
 
 
-#--- z handling #TODO:
+#--- z handling
 
-function z_handling(z) # when will you do? - YO like right NOW??? -- lemme check wikipedia first
+function z_handling(z) # what will you do? - YO like right NOW??? -- lemme check wikipedia first
 decision=''
     if z<1.1
         decision="Bankrupt"
