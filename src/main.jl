@@ -188,7 +188,13 @@ end # returns workingCapital
 #--- z handling #TODO:
 
 function z_handling(z) # when will you do? - YO like right NOW??? -- lemme check wikipedia first
-    if z > 2.99 # CHECK num
+decision=''
+    if z<1.1
+        decision="Bankrupt"
+    elseif z>1.1 & z<=2.6
+        decision="Gray Zone"
+    if z > 2.6 # CHECK num
+
  return
 end
 
