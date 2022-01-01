@@ -1,12 +1,34 @@
-
-abstract function Account()
-
-end
-function DebitAccount(date , amount)
+#= #an oop mentality was to tackle the object!
+function Account()
 
 end
+=#
 
-function CreditAccount(date, amount)
+module Account
+
+Enum accountType = "Debit","Credit"
+
+end
+
+function increment(account, amount)
+account =  account + amount
+
+return account
+end
+
+function decrement(account, amount)
+account = account - amount
+end
+
+function DebitAccount(date,account , amount)
+
+end
+
+function CreditAccount(date, account ,amount)
+
+
+end
+
 
 
 
@@ -16,7 +38,7 @@ end
 transaction Module
 
 each Transation Ideally must get written in 3 locations (at least ):
-forming the 
+forming the
 Accounting Triad
 1. A Journal (daily journal of transactions) -of the self (entity)
 2. A Debit Dr. Book
