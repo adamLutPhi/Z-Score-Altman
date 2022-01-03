@@ -11,8 +11,18 @@ function main()
 
 print("hello World!\n")
 print("welcome to Altman z-score - Julia Edition!\n")
+totalAssets = passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
+#totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
+totalLiabilities = passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
 
 #TODO: complete program here ...
+totalAssets = passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
+#totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
+totalLiabilities = passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
+
+
+z = calcCapital(totalAssets,totalLiabilities)
+z_handling()
 end
 
 #--- Altman Coefficients a1, a2, ..., an
@@ -159,16 +169,20 @@ function currentassets() # returns Number
 end
 #done currentAssets
 
-## ---
+## --- calculates working capital from currentLiabilities & current
 # notespayable = input("please enter 'Notes Payable'")
 # accountspayable = input("please enter 'Accounts Payable'")
 
 #currentLiabs = currentliabilities(
+function calcWorkingCapital()
+
 currentLiabs = currentliabilities()
 currentAssets = currentassets() #input("please enter 'Current Assets' ")
 workingCapital =  calcCapital(currentAssets, currentLiabs)   # currentAssets - currentLiabs #requires currentLiabs
 print("Working Capital is:  $workingCapital !")
 
+return workingCapital
+end
 ##  ---
 #= X1 = working Capital / total assets
  TODO: working Capital needs to be shown
@@ -220,6 +234,8 @@ cliabilities = currentliabilities()
 
 #function currentassets() = input()
 #input() Well-done?! -- i'm nut sure
+
+#=
 #---
 function WorkingCapital()
     """
@@ -236,9 +252,9 @@ return workingCapital
 
 
 end # returns workingCapital
+=#
 
-
-#--- z handling #TODO: finish the z
+#--- z handling  finish the z
 
 function z_handling(z) # when will you do? - YO like right NOW??? -- lemme check wikipedia first
     if z<1.1
@@ -246,9 +262,9 @@ function z_handling(z) # when will you do? - YO like right NOW??? -- lemme check
     elseif z>1.1 & z<=2.6
         decision="Gray Zone";break;
     elseif z > 2.6 # CHECK num
-        decision="Gray Zone";break;
+        decision="good";break;
     elseif z > 2.99 # CHECK num
-        decision="Gray Zone";break;
+        decision="safe Zone";break;
  return
 end
 
