@@ -27,14 +27,18 @@ end
 
 #--- Altman Coefficients a1, a2, ..., an
 
-
+function calcCapital()
 totalAssets = passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
-totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
+#totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
 totalLiabilities = passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
 
-sales = passmissing(parse).(Float64, input("$prompt 'Sales'\n"))
-earnings = passmissing(parse).(Float64, input("$prompt 'Earnings'\n"))
-retainedEarnings = passmissing(parse).(Float64, input("$prompt 'Retained Earnings'\n"))
+return totalAssets - TotalLiabilities  # Capital
+
+#finds sales & Earnings (for a........company) & Retained Rarning
+function calcsales_earnings()
+global sales = passmissing(parse).(Float64, input("$prompt 'Sales'\n"))
+global earnings = passmissing(parse).(Float64, input("$prompt 'Earnings'\n"))
+global retainedEarnings = passmissing(parse).(Float64, input("$prompt 'Retained Earnings'\n"))
 
 """
 Altman Coeffecient formula
