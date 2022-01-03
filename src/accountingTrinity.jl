@@ -35,8 +35,8 @@ module findtheThird
 end
  #syntax: incomplete: "module" at /Users/ahmadlutfi/Desktop/src/src/accountingTrinity.jl:3 requires end
 #TODO: working input ref ...
-capital = input("please insert total $capital")  # insert a value only
-print("capital:   $capital") # TODO: Ignore Alpha words -- REGEX  - maybe later -- I guessed it
+capital = parsemissing( input("please insert total $capital"))  # insert a value only
+# print("capital:   $capital") # TODO: Ignore Alpha words -- REGEX  - maybe later -- I guessed it
 #@assert capital >= 0
 
 export calcCapital, capital,liability
@@ -45,8 +45,8 @@ function calcCapital(totalAssets,totalLiabilities)
 asset = abs(totalAssets);  liability = abs(totalLiabilites) #edit: I don't recall writing those , conciously -wow
 =#
 
-#return max(asset, liability) - min(asset, liability) #that's another thing I've been thinking about - to add or not the add -- that is the Question
-return asset - liability #
+return max(asset, liability) - min(asset, liability) #that's another thing I've been thinking about - to add or not the add -- that is the Question
+return asset - liability #== capital
 end
 
 #---
@@ -54,12 +54,21 @@ end
 
 #TODO:calculate Asset  = capital - liability  #Done!
 #"""user inserts  totalCapital"""
-global capital(totalCapital) =abs(totalCapital);
-global liability(totalLiabilities) = abs(totalLiabilities)
+#global capital(totalCapital) =abs(totalCapital);
+
 global asset(totalAssets) = abs(totalLiabilities)
+global liability(totalLiabilities) = abs(totalLiabilities)
 #TODO:finish  #Done! #2
 
 function calcAssets(totalCapital, totalLiabilities)
+    tota
+capital(totalCapital) = capital = parsemissing( input("please insert total $capital")) tryparse(:Number, input("please insert total Capital"))  # capital(totalCapital)
+liability(totalLiabilities) = tryparse(:Number, input("please insert total Liabilities")) #abs(totalLiabilities)
+#return max(capital, liability) - min(capital, liability)
+return capital - liability # Asset
+end
+
+function calcCapital(totalAssets, totalLiabilities)
 capital(totalCapital) = tryparse(:Number, input("please insert total Capital"))  # capital(totalCapital)
 liability(totalLiabilities) = tryparse(:Number, input("please insert total Liabilities")) #abs(totalLiabilities)
 #return max(capital, liability) - min(capital, liability)
