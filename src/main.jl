@@ -225,7 +225,8 @@ TOTALAssets * (X1+X2()+X3()+X4()+X5())= workingCapital+ retainedEarnings+ earnin
 ##currentAssets Block
 #function altman(totalAssets, sales )
 function currentassets() #on-demand working function
-cassets   = typeparse(Number, input("please enter Current Assets "))#hard to believe sb knows current Assets #so fishy
+             
+cassets   = passmissing(parse).(Float64, input("please enter Current Assets "))
 # null - nill chg to double
 return cassets
 end
