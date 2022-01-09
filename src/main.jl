@@ -421,7 +421,7 @@ end
 
 
 function parsing()#working
-passmissing (parse).(Float64, input("$prompt "))
+passmissing(parse).(Float64, input("$prompt "))
 
 end
 
