@@ -39,6 +39,9 @@ z = calcCapital(totalAssets,totalLiabilities)
 score = z_handling(z)
 
 #TODO: decision making (i.e. what to do about it )
+
+resutlt - z_result(score)
+
 end
 
 #--- Result: Decision making: based on paper
