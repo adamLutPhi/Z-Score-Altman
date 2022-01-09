@@ -1,55 +1,90 @@
-# TODO: Altman's z score
+# TODO: add paper credits...
 using Missings;
 using DataFrames;
 global prompt = "Please enter "
 global message = ""
 
+"""
+
+"""
 ##=#  program main
 
 #totalAssets goes into: X1, X2, X3, & X5
 function main()
+"""
+general notes:
 
+business timespan = 3 years in some books-due to rapid technological factor
+                  = 5 years in other older books
+- the effective time for Utilizing a particular asset
+whereaas each asset could be used
+in other words, every asset has its own Utility Function (based on 'Economic Factors')
+
+"""
 print("hello World!\n")
 print("welcome to Altman z-score - Julia Edition!\n")
-totalAssets = passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
-#totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
-totalLiabilities = passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
 
-#TODO: complete program here ...
-totalAssets = passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
-#totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
-totalLiabilities = passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
+#TODO: refactor complete program here ...
+totalAssets = passmissing (parse).(Float64, input("$prompt 'total Assets'\n"))
+#totalCapital =  passmissing (parse).(Float64, input("$prompt 'total Capital'\n"))
+totalLiabilities = passmissing (parse).(Float64, input("$prompt 'total Liabilities'\n"))
 
 
+
+
+#...
+calcsales_earnings()
+#TODO: calculate z
 z = calcCapital(totalAssets,totalLiabilities)
-z_handling()
+score = z_handling(z)
+
+#TODO: decision making (i.e. what to do about it )
 end
 
-#--- Altman Coefficients a1, a2, ..., an
+#--- Result: Decision making: based on paper
 
+function z_result(score)
+
+
+        if zscore < 1.18
+            decision= "likely to be bankrupt"
+        elseif 1.81< Z < 2.99
+            decision="Stable"
+        elseif score > 2.99
+            decision="Safe Zone"
+        else end
+     return (score,decison)
+
+end
+#--- Altman Coefficients a1, a2, ..., an
+#assets : read assets
 function calcCapital()
-totalAssets = passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
-#totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
-totalLiabilities = passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
+totalAssets = passmissing (parse).(Float64, input("$prompt 'total Assets'\n"))
+#totalCapital =  passmissing (parse).(Float64, input("$prompt 'total Capital'\n"))
+totalLiabilities = passmissing (parse).(Float64, input("$prompt 'total Liabilities'\n"))
 
 return totalAssets - TotalLiabilities  # Capital
 
 #finds sales & Earnings (for a........company) & Retained Rarning
 function calcsales_earnings()
-global sales = passmissing(parse).(Float64, input("$prompt 'Sales'\n"))
-global earnings = passmissing(parse).(Float64, input("$prompt 'Earnings'\n"))
-global retainedEarnings = passmissing(parse).(Float64, input("$prompt 'Retained Earnings'\n"))
+global sales = passmissing (parse).(Float64, input("$prompt 'Sales'\n"))
+global earnings = passmissing (parse).(Float64, input("$prompt 'Earnings'\n"))
+global retainedEarnings = passmissing (parse).(Float64, input("$prompt 'Retained Earnings'\n"))
 
+return (sales, earnings, retainedEarnings)
+end
+
+#--- Altman Coefficients a1, a2, ..., an
 """
 Altman Coeffecient formula
 changeable parameters
 sums up Altman's z-score equation , as provided in the paper
 """
 function altmanCoeffs(a1=1.2 , a2=1.4 , a3=3.3 , a4=0.6 ,a5 = 0.999 )
-    return z = a1 * X1(totalAssets,workingCapital)
+    return z = a1 * X1(totalAssets,workingCapital) #req:working capiyal
     +a2 * X2(totalAssets,retainedEarnings)
     + a3 * X3(totalAssets,earnings)
-    + a4 * X4(capital, totalLiabilities) = capital / totalLiabilities
+    + a4 * X4(capital, totalLiabilities) # X4 = capital / totalLiabilities
     + a5 * X5(sales, totalAssets)
 
 #---
@@ -106,9 +141,9 @@ end
 #capital Calculation
 #TODO: #Done!
 #"""user inserts  totalCapital"""
-global capital = passmissing(parse).(Float64, input("$prompt 'capital'\n"))
-global liability  = passmissing(parse).abs(Float64, input("$prompt 'liability'\n"))
-global asset  = passmissing(parse).abs(input("$prompt 'asset'\n"))
+global capital = passmissing (parse).(Float64, input("$prompt 'capital'\n"))
+global liability  = passmissing (parse).abs(Float64, input("$prompt 'liability'\n"))
+global asset  = passmissing (parse).abs(input("$prompt 'asset'\n"))
 #TODO: #Done!
 
 function calcAssets(totalCapital, totalLiabilities)
@@ -139,11 +174,11 @@ function currentliabilities()
     """
     print("this function calculates different short-term liabilitues below 1 year:\n1. Notes Payable\n2. Accounts Payable\n3. Accrued Expense\n4. Unearned Revenue\n5. Long-term Debt\n")
 # prompt = "Please enter "
-    notesPayable =  passmissing(parse).(Float64, input("$prompt 'Notes Payable'\n"))
-    accountsPayable = passmissing(parse).(Float64, input("$prompt 'Accounts Payable'\n"))
-    accruedExpense = passmissing(parse).(Float64, input("$prompt 'Accrued Expense'\n"))
-    unearnedRevenue = passmissing(parse).(Float64, input("$prompt 'Unearned Revenue'\n"))
-    longtermDebt = passmissing(parse).(Float64, input("$prompt 'Long-term Debt'\n"))
+    notesPayable =  passmissing (parse).(Float64, input("$prompt 'Notes Payable'\n"))
+    accountsPayable = passmissing (parse).(Float64, input("$prompt 'Accounts Payable'\n"))
+    accruedExpense = passmissing (parse).(Float64, input("$prompt 'Accrued Expense'\n"))
+    unearnedRevenue = passmissing (parse).(Float64, input("$prompt 'Unearned Revenue'\n"))
+    longtermDebt = passmissing (parse).(Float64, input("$prompt 'Long-term Debt'\n"))
 
     return  notesPayable + accountsPayable + accruedExpense + unearnedRevenue + longtermDebt
 end # returns currentLiabilities :: Number
@@ -161,12 +196,12 @@ function currentassets() # returns Number
 
     """
 
-    accountsReceivable  = passmissing(parse).(Float64, input("$prompt 'Accounts Receivable '\n"))
-    inventory = passmissing(parse).(Float64, input("$prompt 'Inventory'\n"))
-    securities= passmissing(parse).(Float64, input("$prompt 'Securities'\n"))
-    commercialPaper = passmissing(parse).(Float64, input("$prompt 'Commercial Paper'\n"))
-    treasuryNotes = passmissing(parse).(Float64, input("$prompt 'Treasury Notes'\n"))
-    other = passmissing(parse).(Float64, input("$prompt 'Other'\n"))
+    accountsReceivable  = passmissing (parse).(Float64, input("$prompt 'Accounts Receivable '\n"))
+    inventory = passmissing (parse).(Float64, input("$prompt 'Inventory'\n"))
+    securities= passmissing (parse).(Float64, input("$prompt 'Securities'\n"))
+    commercialPaper = passmissing (parse).(Float64, input("$prompt 'Commercial Paper'\n"))
+    treasuryNotes = passmissing (parse).(Float64, input("$prompt 'Treasury Notes'\n"))
+    other = passmissing (parse).(Float64, input("$prompt 'Other'\n"))
 
     return  accountsReceivable + inventory + securities + commercialPaper +
             treasuryNotes + other
@@ -187,6 +222,11 @@ print("Working Capital is:  $workingCapital !")
 
 return workingCapital
 end
+
+# ---
+
+function A
+
 ##  ---
 #= X1 = working Capital / total assets
  TODO: working Capital needs to be shown
@@ -225,8 +265,8 @@ TOTALAssets * (X1+X2()+X3()+X4()+X5())= workingCapital+ retainedEarnings+ earnin
 ##currentAssets Block
 #function altman(totalAssets, sales )
 function currentassets() #on-demand working function
-             
-cassets   = passmissing(parse).(Float64, input("please enter Current Assets "))
+
+cassets   = passmissing (parse).(Float64, input("please enter Current Assets "))
 # null - nill chg to double
 return cassets
 end
@@ -259,18 +299,18 @@ return workingCapital
 end # returns workingCapital
 =#
 
-#--- z handling  finish the z
+#--- z handling  finish the z --#Done!
 
 function z_handling(z) # when will you do? - YO like right NOW??? -- lemme check wikipedia first
-    if z<1.1
-        decision="Bankrupt";break;
-    elseif z>1.1 & z<=2.6
-        decision="Gray Zone";break;
-    elseif z > 2.6 # CHECK num
-        decision="good";break;
-    elseif z > 2.99 # CHECK num
-        decision="safe Zone";break;
- return
+
+    if z < 1.18
+        decision="Distress"
+    elseif z> 1.81 && z < 2.99
+        decision="Gray Zone"
+    elseif z > 2.99
+        decision="Safe Zone"
+    else end
+ return (z,decison)
 end
 
 
@@ -348,27 +388,27 @@ end
 
 
 module currentAssets() #hides lots of mini functions
-accountsReceivable() = passmissing(parse).(Float64, input( "$accountsReceivable" ) )
-inventory() = passmissing(parse).(Float64, input( " $inventory" ) )
-Securities() =passmissing(parse).(Float64, input( " $Securities" ) )
-commercialPaper() = passmissing(parse).(Float64, input( " $commercialPaper" ) )
-treasuryNotes() = passmissing(parse).(Float64, input( " $TreasuryNotes" ) )
-treasuryNotes() = passmissing(parse).(Float64, input( " $TreasuryNotes" ) )
-other() = passmissing(parse).(Float64, input( " $other " ) )
+accountsReceivable() = passmissing (parse).(Float64, input( "$accountsReceivable" ) )
+inventory() = passmissing (parse).(Float64, input( " $inventory" ) )
+Securities() =passmissing (parse).(Float64, input( " $Securities" ) )
+commercialPaper() = passmissing (parse).(Float64, input( " $commercialPaper" ) )
+treasuryNotes() = passmissing (parse).(Float64, input( " $TreasuryNotes" ) )
+treasuryNotes() = passmissing (parse).(Float64, input( " $TreasuryNotes" ) )
+other() = passmissing (parse).(Float64, input( " $other " ) )
 
 function calccurrentAssets() #args)
- return    accountsReceivable() + inventory() + Securities()
-+commercialPaper()+treasuryNotes() + other()
+ return    accountsReceivable() + inventory() + Securities() +commercialPaper()+treasuryNotes() + other()
 end
-end
-
-
+#end
 function nonCurrentAssets() # working #"nonCurrentAssets")
 
-    return passmissing(parse).(Float64, input( " nonCurrentAssets" ) )
+    return passmissing (parse).(Float64, input( " nonCurrentAssets" ) )
 end
 
 function calAssets()
+    """
+Assets  = Current (less than bussiness timespan)+ non-current Asset (more than bussiness timespan  )
+    """
 calccurrentAssets() + nonCurrentAssets()
 end
 
@@ -378,7 +418,7 @@ end
 
 
 function parsing()#working
-passmissing(parse).(Float64, input("$prompt "))
+passmissing (parse).(Float64, input("$prompt "))
 
 end
 
