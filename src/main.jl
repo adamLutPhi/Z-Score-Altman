@@ -30,10 +30,8 @@ totalAssets = passmissing (parse).(Float64, input("$prompt 'total Assets'\n"))
 totalLiabilities = passmissing (parse).(Float64, input("$prompt 'total Liabilities'\n"))
 
 
-
-
 #...
-calcsales_earnings()
+sales, earnings, retainedEarnings = calcsales_earnings()
 #TODO: calculate z
 z = calcCapital(totalAssets,totalLiabilities)
 score = z_handling(z)
@@ -163,8 +161,7 @@ function calcLiabilities(totalAssets,totalCapital)
 end
 
 
-#--- cliabilities cassets workingCapital = currentliabilities() +
-
+  
 #notesPayable, accountsPayable, accruedExpense,unearnedRevenue, longtermDebt
 function currentliabilities()
     """
