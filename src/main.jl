@@ -43,13 +43,22 @@ resutlt - z_result(score)
 end
 
 #--- Result: Decision making: based on paper
-
+"""
 function z_result(score)
 
+    comments on the score [based on the mentioned paper] (due to the following):
+    1. z-score < 1.18 -then-> (Most likely to be ) Bankrupt!
+    2. 1.81 < z-score < 2.99 -then-> "Stable #ok, (in between) #unsure Region!!
+    3.  z-score > 2.99 -then-> "Safe Zone"
 
-        if zscore < 1.18
+    me: note: however, how Sure is "Sure" [That is (the Real) Question!]
+"""
+function z_result(score)
+    decision = ""
+
+        if score < 1.18
             decision= "likely to be bankrupt"
-        elseif 1.81< Z < 2.99
+        elseif 1.81< score < 2.99
             decision="Stable"
         elseif score > 2.99
             decision="Safe Zone"
@@ -161,7 +170,7 @@ function calcLiabilities(totalAssets,totalCapital)
 end
 
 
-  
+
 #notesPayable, accountsPayable, accruedExpense,unearnedRevenue, longtermDebt
 function currentliabilities()
     """
@@ -225,7 +234,7 @@ end
 
 # ---
 
-function A
+#function A## sanity checked!
 
 ##  ---
 #= X1 = working Capital / total assets
