@@ -1,3 +1,15 @@
+#TODO: ADD CI FUNCTION
+
+# using Coverage;  Codecov.submit_token(Codecov.process_folder())'
+using Coverage;
+# Codecov.submit_token(Codecov.process_folder(7e3117b1-3646-4107-817c-1d6e569a85b0))'
+function codeconv(CODECOV_TOKEN='7e3117b1-3646-4107-817c-1d6e569a85b0')
+return Codecov.submit_token(Codecov.process_folder(CODECOV_TOKEN))
+
+end
+
+
+
 function parsing(message1="please insert a Number", message2=3000 ::Number) #i.e. Number & string
 
 # if isnumeric(tryparse( typeof(message2) ,
