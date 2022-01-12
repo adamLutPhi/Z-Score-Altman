@@ -31,23 +31,25 @@ together, they make up the following Golden (brown) Equation:
 ## Assets = Liabilites + Capital
 ## ---
 #existential question the function is already equal to its absolute value -talk about a Self-reference !
-global capital(totalCapital) =abs(totalCapital);
-global asset(totalAssets) = abs(totalLiabilities)
-global liability(totalLiabilities) = abs(totalLiabilities)
+#global capital(totalCapital) =abs(totalCapital);
+
+ asset(totalAssets) = totalLiabilities  # no-abs-allowed #TODO:sanity-check
+ liability(totalLiabilities) = totalLiabilities # no-abs-allowed #TODO:sanity-check
+
 #nothing, yet - chop chop, gotta go, are you there yet, where you at!
 
 
  #syntax: incomplete: "module" at /Users/ahmadlutfi/Desktop/src/src/accountingTrinity.jl:3 requires end
 
 #TODO: working input ref ... # DONE!
-capital = input("please insert total $capital")  # insert a value only
-liability = input("please insert total $liability")
-asset = input("please insert total $asset")
+capital = passmissing(input("please insert total $capital"))  # insert a value only
+liability = passmissing( input("please insert total $liability"))
+asset = passmissing(input("please insert total $asset"))
 
 print("capital:   $capital") # TODO: Ignore Alpha words -- REGEX  - maybe later -- I guessed it
-#@assert capital >= 0
+#@assert capital >= 0 #doesn;t matter  # capital can take both positive & Negative values
 
-export calcCapital, capital,liability
+#export calcCapital, capital,liability
 #=
 function calcCapital(totalAssets,totalLiabilities)
 asset = abs(totalAssets);  liability = abs(totalLiabilites) #edit: I don't recall writing those , conciously -wow
