@@ -138,7 +138,11 @@ end
 #--- prompt for accounting trinity : Assets, liabilities, &  Capital
 function main_3Accounts()
 """
-prompts user to Directly enter 3 accounts: Capital+ Assets+ Liabilities
+prompts user to Directly enter the 3 accounts:
+1. Capital
+2. Assets
+3. Liabilities
+
 """
 capital = passmissing(parse).(Float64, input("$prompt 'capital'\n")))
 liability  = passmissing(parse).abs(Float64, input("$prompt 'liability'\n")))
@@ -146,33 +150,62 @@ asset  = passmissing(parse).abs(input("$prompt 'asset'\n"))
 
 return capital , liability,  asset
 
-#--- Assets
+#--- (Total) Assets
+
 function calcAssets()
 
 """
-calculates Total Capital & Liabilties
+calculates Assets, from Total Capital  & Liabilties
 
+Assets =  Capital - Liabilities
+
+Q. what if Capital is negative? #non-sense
+Q. what if Liabilities value is negative (more ) # rare #doesn't make much #sense
+
+-Returns capital & liability [As is]
 """
-capital = abs(capital(totalCapital))
-liability = abs(liability(totalLiabilities))
+
+capital = capital(totalCapital)
+liability = liability(totalLiabilities)
 
 return capital , liability
 
 end
 
+#---- calcAssets
 function calcAssets(totalCapital, totalLiabilities)
 
 """
 Calculates Assets from totalCapital, & TotalLiabilties
 -takes their abstract values
 
-Q. what if Liability is Negative? (more liabilities incurred )
-"""
-capital = abs(capital(totalCapital))
-liability = abs(liability(totalLiabilities))
+Q. what if Capital is Negative? (below 0 ) ( doesn't make sense) #non-sense
+Q. what if Liability is Negative? (more Accounts Recievables #busiess is Flourishing!)
+#what makes sense?
 
-capital = capital(totalCapital) = abs(capital)
-liability = liability(totalLiabilities) abs(totalLiabilities)
+"""
+
+capital = capital(totalCapital) #TODO:check
+liability = liability(totalLiabilities) #TODO: check
+
+return capital , liability
+
+#---- calcAssets
+function calcAssets(totalCapital, totalLiabilities)
+
+"""
+Tampering with the accounts' values is  Crucial
+i.e. do not change the accounts' negative values
+(it is normal for accounts to have both negative & Positive values)
+(requires further handling)
+
+"""
+capital = capital(totalCapital)  #  abs(capital)
+liability = liability(totalLiabilities)  # abs(totalLiabilities)
+
+return capital, liability
+#----
+
 
 # max(capital , liability)
 #return max(capital, liability) - min(capital, liability)
@@ -231,7 +264,7 @@ currentLiabilities = abs(notesPayable) + abs(accountsPayable) + abs(accruedExpen
 
 #---workingCapital Capital Capital
 
-function workingCapital(currentAssets,  currentLiabilities) 
+function workingCapital(currentAssets,  currentLiabilities)
 workingCapital =  calcCapital(currentAssets, currentLiabilities)
 print("Working Capital is:  $workingCapital !")
 
@@ -290,7 +323,12 @@ cliabilities = currentliabilities()
 #--- current liabilities
 function calcLiabilities(totalAssets,totalCapital)
 """
-here, we do NOT Know which is larger; Utilize Min, max
+calculates Liabilities from total Assets & total Capital
+
+we do NOT Know which is larger; Utilize Min, max (nor which is negative or positive)
+
+Hint: Q.  what if sign is major, more important than abstract
+
 asset = abs(totalAssets); capital = abs(totalCapital);
 return max(asset, capital) - min(asset, capital)
 
@@ -308,7 +346,7 @@ function currentliabilities()
 """
 Assumptions:
  -calculates current liabilities (it's the same for companies or personal accounts )
- - calculates different short-term liabilitues below 1 year through:
+ -calculates different short-term liabilitues below 1 year through:
 
     1. Notes Payable
     2. Accounts Payable
@@ -319,8 +357,7 @@ Assumptions:
 - Returns: notesPayable , accountsPayable , accruedExpense , unearnedRevenue , longtermDebt
 
 """
-#    print("this function calculates different short-term liabilitues below 1 year:\n1. Notes Payable\n2. Accounts Payable\n3. Accrued Expense\n4. Unearned Revenue\n5. Long-term Debt\n")
-# prompt = "Please enter "
+
     notesPayable =  passmissing(parse).(Float64, input("$prompt 'Notes Payable'\n"))
     accountsPayable = passmissing(parse).(Float64, input("$prompt 'Accounts Payable'\n"))
     accruedExpense = passmissing(parse).(Float64, input("$prompt 'Accrued Expense'\n"))
@@ -362,26 +399,7 @@ function z_handling(z) # when will you do? - YO like right NOW??? -- lemme check
 end
 
 
-#--- Altman Coefficients  Compact "assignment form": X1...X5
 
-X1(totalAssets,workingCapital) = workingCapital / totalAssets
-
-# X2 = retained earnings / total assets
-
-X2(totalAssets,retainedEarnings) = retainedEarnings / totalAssets
-
-# X3 = earnings / total assets
-X3(totalAssets,earnings) = earnings / totalAssets
-
-# X4 = equity(capital) / total liabilities
-
-X4(capital, totalLiabilities) = capital / totalLiabilities
-
-# X5 = sales / total assets
-
-X5(sales, totalAssets) = sales / totalAssets
-
-####add here
 
 
 #--- function

@@ -42,9 +42,9 @@ together, they make up the following Golden (brown) Equation:
  #syntax: incomplete: "module" at /Users/ahmadlutfi/Desktop/src/src/accountingTrinity.jl:3 requires end
 
 #TODO: working input ref ... # DONE!
-capital = passmissing(input("please insert total $capital"))  # insert a value only
-liability = passmissing( input("please insert total $liability"))
-asset = passmissing(input("please insert total $asset"))
+capital = passmissing(input("please insert total capital"))  # insert a value only
+liability = passmissing( input("please insert total liability"))#throws(ERROR) : redefinition of Constant Liability #TODO:sanity-check
+asset = passmissing(input("please insert total asset"))
 
 print("capital:   $capital") # TODO: Ignore Alpha words -- REGEX  - maybe later -- I guessed it
 #@assert capital >= 0 #doesn;t matter  # capital can take both positive & Negative values
@@ -54,7 +54,7 @@ print("capital:   $capital") # TODO: Ignore Alpha words -- REGEX  - maybe later 
 function calcCapital(totalAssets,totalLiabilities)
 asset = abs(totalAssets);  liability = abs(totalLiabilites) #edit: I don't recall writing those , conciously -wow
 =#
-
+#---
 function calcCapital(asset, liability)
 #return max(asset, liability) - min(asset, liability) #that's another thing I've been thinking about - to add or not the add -- that is the Question
 """
@@ -63,6 +63,7 @@ capital = asset - liability
 capital = asset - liability # for some reason i have to check with liability ... #TODO:
 return capital # Capital
 
+#---
 function calcAsset(capital, liability)
 """
 
@@ -218,19 +219,21 @@ end
 #test passed
 
 
-#--- T Handling #DONE
+#--- T Input  Handling #Re-Opened!
 
+#TODO: sanity check code below
+#TODO: isa Useful ?
 if(typeof(T) isa Int)
 datatype = Int
-@inferred parse(Int, "$digits")
+@inferred parse(Int, "$digits") #throws(error): @inferred not defined
 # end
 elseif (typeof(T) isa Float64)
     datatype = Float64
-@inferred parse(Float64, "$digits")
+@inferred parse(Float64, "$digits") #throws(error): @inferred not defined
 #end
 elseif(typeof(T) isa Complex{Int})
     datatype = Complex{Int}
-     @inferred parse(Complex{Int}, "$digits")
+     @inferred parse(Complex{Int}, "$digits") #throws(error): @inferred not defined
 end
 
 #you're in my head, Always....
