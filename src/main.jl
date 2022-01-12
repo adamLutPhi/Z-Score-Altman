@@ -88,7 +88,7 @@ end
 """
 Altman Coeffecient formula
 changeable parameters
-sums up Altman's z-score equation , as provided in the paper
+sums up Altman's z-score equation , as provided in the enclosed academic paper
 """
 function altmanCoeffs(a1=1.2 , a2=1.4 , a3=3.3 , a4=0.6 ,a5 = 0.999 )
     return z = a1 * X1(totalAssets,workingCapital) #req:working capiyal
@@ -157,7 +157,7 @@ global asset  = passmissing (parse).abs(input("$prompt 'asset'\n"))
 #TODO: #Done!
 
 function calcAssets(totalCapital, totalLiabilities)
-capital = capital(totalCapital)
+capital = capital(totalCapital) = abs(capital)
 liability = liability(totalLiabilities) = abs(totalLiabilities)
 #return max(capital, liability) - min(capital, liability)
 return  capital - liability
@@ -194,7 +194,7 @@ end # returns currentLiabilities :: Number
 
 function currentassets() # returns Number
     """
-    calculates short-term assets, below 1 year
+    , for Tech. products)
     Current assets = Cash and Cash Equivalents +
     1. Accounts Receivable +
     2. Inventory +
@@ -204,7 +204,6 @@ function currentassets() # returns Number
     6.  Other Instruments
 
     """
-
     accountsReceivable  = passmissing (parse).(Float64, input("$prompt 'Accounts Receivable '\n"))
     inventory = passmissing (parse).(Float64, input("$prompt 'Inventory'\n"))
     securities= passmissing (parse).(Float64, input("$prompt 'Securities'\n"))

@@ -1,7 +1,12 @@
 module bankNote
 
 #--- functions
+"""
+mimics the money found in registry systems
 
+Idea: how about adding a penny, & a nickle ??
+
+"""
 function _5dollar(value=5)
 end
 function _10dollar(value=10)
