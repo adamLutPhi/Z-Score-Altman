@@ -63,19 +63,28 @@ return capital # Capital
 
 function calcAsset(capital, liability)
 """
-asset =  - liability
+
+after subtracting all debt (personal debt included)
+
+asset = -  liab
+capital = asset  - liability
 
 """
-asset : asset <
-capital = asset - liability
-return capital
+# asset = asset < 0 : asset = 0 # if any account is less than 0 , adds it as 0 : Reason:  a cadlag process cannot be less than a  0
+asset = capital - liability
+# capital = asset - liability
+return asset  # capital
 end
 
 function calcLiability(capital, asset)
-liability  =   capital - asset
-return liability
+"""
+Liability Could be in a form of bonds
+Liability (Debt) = (short-term) Debt + (Long-term) Debt
+"""
+    liability  =   capital - asset
+    return liability
 
-end
+    end
 
 end
 
@@ -123,9 +132,10 @@ i.e. some one is Paying you off Dr*Dr = Dr
 "
 function calcAsset(totalCapital, totalLiabilities)
 
-
+return totalCapital - totalLiabilites
 
 end
+
 #--- prompt Area
 #=
 using Parsers

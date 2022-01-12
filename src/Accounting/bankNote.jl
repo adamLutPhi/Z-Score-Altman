@@ -2,21 +2,18 @@ module bankNote
 
 #--- functions
 """
-mimics the money found in registry systems
+Mimics the Cash found in a cash-registry systems
 
 Idea: how about adding a penny, & a nickle ??
 
 """
-function _5dollar(value=5)
+function _5dollar(count::Interger,value=5)
 end
-function _10dollar(value=10)
+function _10dollar(count::Interger,value=10)
 end
-function _20dollar(value=20)
+function _20dollar(count::Interger, value=20)
 
 end
-
-
-
 
 #TODO: time of start counting of Inflation -i.e. inflation, since When?
 """
@@ -24,12 +21,15 @@ a generic dollar amount
 has a value
 Changing based on inflation
 """
-a generic dollar amount , has a value Changing based on inflation
+# a generic dollar amount: has a value Changing based on inflation
 #
-function _Xdollar(value, ,inflation=10^-1)
-
+function _Xdollar(value, ,inflation = 5 * 10^-2)
+"""
+returns the intrinsic value of a dollar
+"""
     intrinsic_value =  (value - value * inflation)
     #if has
+    return intrinsic_value
 end
 
 #The must-have factor

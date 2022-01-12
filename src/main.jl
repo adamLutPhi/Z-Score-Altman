@@ -322,7 +322,7 @@ function z_handling(z) # when will you do? - YO like right NOW??? -- lemme check
 end
 
 
-#--- Compact "assignment form":
+#--- Altman Coefficients  Compact "assignment form": X1...X5
 #TODO:
 X1(totalAssets,workingCapital) = workingCapital / totalAssets
 
@@ -344,21 +344,6 @@ X5(sales, totalAssets) = sales / totalAssets
 ####add here
 
 
-
-
-
-##sanity check & test later
-#= function parsing(message1, message2 ) #i.e. Number & string
-
-if isnumeric(
-     tryparse( typeof("$message1") , input("$message1 $message2 \n"))
-)
-else
-    throw() #rethrow()
-
-end
-end
-=#
 #---Resear #TODO:Testing & Research
 #done writing, needs testing
 
@@ -371,8 +356,6 @@ end
 either
 
 A:
-
-
 liabilities =
 current #done
 
@@ -394,7 +377,7 @@ end
 
 # parsing()
 
-
+#--- module
 module currentAssets() #hides lots of mini functions
 accountsReceivable() = passmissing (parse).(Float64, input( "$accountsReceivable" ) )
 inventory() = passmissing (parse).(Float64, input( " $inventory" ) )
@@ -415,16 +398,12 @@ end
 
 function calAssets()
     """
-Assets  = Current (less than bussiness timespan)+ non-current Asset (more than bussiness timespan  )
+    Assets  = Current (less than the  bussiness's set timespan)+ non-current Asset (more he  bussiness's set timespan  )
     """
-calccurrentAssets() + nonCurrentAssets()
+    return calccurrentAssets() + nonCurrentAssets()
 end
 
-#end Assets -----
-
-
-
-
+#end  of Assets -----
 function parsing()#working
 passmissing(parse).(Float64, input("$prompt "))
 
@@ -432,16 +411,12 @@ end
 
 
 function altmanCoeffs()
-
-    """
+"""
 currentliabilities: liabilities (Debts) shorter than 1 Year
 noncurrentliabs: LIABILITIES on the Long-term ; more than 1 Year
-    """
-
+"""
 currentliabs = currentliabilities() #done # omg my fave guitar : golden silver , soft & tender.. yes & no my true love s eye autumns comming  -- ive got to sing write my heart -focus
 noncurrentliabs =  tryparse(:Number ,input("please input Current Liabilities") )
-return # continue singing: round & round...  the burning circels , and then , the winter ....  # dislike please - golden sliver , all too soon - milk n honey, word & honeyyy# word * feels the cold weather]*
-altmanCoeffs()
-
+    return altmanCoeffs() # continue singing: round & round...  the burning circels , and then , the winter ....  # dislike please - golden sliver , all too soon - milk n honey, word & honeyyy# word * feels the cold weather]*
 
 end

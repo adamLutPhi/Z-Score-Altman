@@ -44,9 +44,11 @@ Accounting Triad
 2. A Debit Dr. Book
 3. A Credit Cr. Book
 
-Books can increase + or decrease in value -
+Books can increase (+) or decrease (-) in value
 
-but each increment in a book has a
+But each increment in a book has another corresponding decrement
+
+(each action has a reaction )
 
 """
 module transaction
