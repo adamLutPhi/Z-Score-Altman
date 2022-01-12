@@ -1,9 +1,9 @@
 """
 The Accounting Trinity or [CAL]!
 
-[]: important (somehow) - it's objective alright
-(): optional read , acts as a comment
-me: personal words, to add an overall flavor & meaning to the comment itself - as needed
+[]: Important (somehow) - (it's objective alright)
+(): an Optional read , acts as a comment
+me: personal words, notes , to add an overall flavor & meaning to the comment itself - as needed
 A/C : Account - a fancy way accountants use for any account 'book'
 1.Assets k let's start - here goes nothing
 
