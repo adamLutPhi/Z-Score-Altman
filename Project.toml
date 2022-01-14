@@ -1,8 +1,10 @@
 authors = ["ahmad lutfi <obzajd@gmail.com>",
 
-name = "JuliaAltman",
+name = "Altman",
 
 uuid = "5279b549-45a3-46ff-99af-0660f698a9fb",
 
-
 version = "0.1.0"
+
+[deps]
+Debugger = "31a5f54b-26ea-5ae9-a837-f05ce5417438"
