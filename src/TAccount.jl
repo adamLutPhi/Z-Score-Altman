@@ -25,9 +25,11 @@ Enum accountOperation = "Debit(Dr)","Credit(Cr)"
 
 function DrAccount(drAccount,accountOperation)
 """
-like in electronics:
-if different -> repulsive relationship (-)
-if same (direction) -> amicable relationshipe (+)
+unlike in electronics:
+
+if same direction (Dr DrAccount [DrAccount with Debit(Dr) Operation ] ) -> amicable relationshipe (+)
+if different (Cr DrAccount [DrAccount with Credit(Cr) ] ) -> repulsive relationship (-)
+
 Debit-Specific account operations
 specifically:
 
@@ -46,6 +48,25 @@ Credit(Cr) DrAccount <==> DrAccount = DrAccount - Credit
         crAccount = crAccount + accountOperation
     end
 
+end
+
+
+function crAccount()
+
+    """
+    unlike in electronics:
+
+    if same direction (Cr CrAccount [CrAccount with Credit(Cr) Operation ] ) -> Amicable relationship (+)
+    if different (Dr CrAccount [CrAccount with Debit(Dr) ] ) -> Repulsive relationship (-)
+
+    Debit-Specific account operations
+    specifically:
+
+    Debit(Dr) CrAccount <==> CrAccount = CrAccount + Debit(Dr)
+
+    Credit(Cr) CrAccount <==> CrAccount = CrAccount - Credit(Cr)
+
+    """
 end
 
 mutable struct drAccount(balance=bal, accountOperation="Debit")
