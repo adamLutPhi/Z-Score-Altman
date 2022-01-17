@@ -2,12 +2,54 @@
 function Account()
 
 end
+
+
+
 =#
 
 module Account
+    """
+    the 4 main equations in Accounting:
 
-Enum accountType = "Debit","Credit"
+    #Debit account operations (either Bullish up or (Dr a DrAccount)
 
+    Dr DrAccount newBalance -means-> DrAccount = DrAccount + newBalance [DrAccount Accumulated]
+
+    Cr DrAccount newBalance -means->   DrAccount = DrAccount - newBalance [DrAccount Utilized]
+
+    Credit account operations (either Bullish (Up) or (Cr a CrAccount) ; or Bearish(Dn) (Dr a CrAccount)
+
+
+    """
+Enum accountOperation = "Debit(Dr)","Credit(Cr)"
+
+function DrAccount(drAccount,accountOperation)
+"""
+like in electronics:
+if different -> repulsive relationship (-)
+if same (direction) -> amicable relationshipe (+)
+Debit-Specific account operations
+specifically:
+
+Debit(Dr) DrAccount <==> DrAccount = DrAccount + Debit
+
+Credit(Cr) DrAccount <==> DrAccount = DrAccount - Credit
+
+"""
+
+    if accountOperation isa "Debit"
+        drAccount= drAccount + accountOperation
+    end
+
+    elseif accountOperation isa "Credit"
+
+        crAccount = crAccount + accountOperation
+    end
+
+end
+
+mutable struct drAccount(balance=bal, accountOperation="Debit")
+    balance=bal
 end
 
 function increment(account, amount)
@@ -20,8 +62,12 @@ function decrement(account, amount)
 account = account - amount
 end
 
-function DebitAccount(date,account , amount)
+function DebitAccount(date,drAccount , amount)
+    """
+    Debiting a DrAccount -> DrAccount is incremented
 
+    """
+drAccount
 end
 
 function CreditAccount(date, account ,amount)
