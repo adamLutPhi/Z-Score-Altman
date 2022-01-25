@@ -1,8 +1,10 @@
 # Altman's z-Score
 
-a Financial company Indicator
+a Financial company Indicator, _seems to be a success, across the centuries_ 
 
-![330px-Zscore](https://user-images.githubusercontent.com/20923018/144329325-06c5f0ae-5c47-49c6-93e6-bae7d1eea3e3.jpg)
+
+![330px-Zscore](https://user-images.githubusercontent.com/20923018/144329325-06c5f0ae-5c47-49c6-93e6-bae7d1eea3e3.jpg) - from a  wikipedia lens
+
 
 An Indicator for calculating a company's distress a.k.a solvency
 this model relies on accumulation of  5 different Accounting Ratios
