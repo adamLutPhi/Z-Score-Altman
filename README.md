@@ -1,9 +1,11 @@
-# Altman's z-Score
+# Solvency Altman's z-Score
 
-a Financial company Indicator, _seems to be a success, across the centuries_ 
+- a Financial company Indicator, a
+- a Linear equation: formed off an **accounting Ratios**
+- _Seems to be a **success**, across the centuries (since its debut)_ 
 
 
-![330px-Zscore](https://user-images.githubusercontent.com/20923018/144329325-06c5f0ae-5c47-49c6-93e6-bae7d1eea3e3.jpg) - from a  wikipedia lens
+![330px-Zscore](https://user-images.githubusercontent.com/20923018/144329325-06c5f0ae-5c47-49c6-93e6-bae7d1eea3e3.jpg) - from the  [wikipedia](https://en.wikipedia.org/wiki/Altman_Z-score) 
 
 
 An Indicator for calculating a company's distress a.k.a solvency
@@ -34,4 +36,10 @@ you can access the license from [here](src/LICENSE.md)
 
 ## Disclaimer
 this is for Educational purposes only
-The author is not held responsibale, at all costs
+The author is Not Held Responsibale, at all costs
+
+
+## Author
+
+[![Logo](https://github.com/adamwillisXanax/adamwillisXanax/blob/main/Assets/logo.png)
+](https://github.com/adamwillisXanax/adamwillisXanax)
