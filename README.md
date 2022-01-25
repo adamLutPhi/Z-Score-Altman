@@ -1,5 +1,7 @@
 # Altman's z-Score
 
+a Financial company Indicator
+
 ![330px-Zscore](https://user-images.githubusercontent.com/20923018/144329325-06c5f0ae-5c47-49c6-93e6-bae7d1eea3e3.jpg)
 
 An Indicator for calculating a company's distress a.k.a solvency
