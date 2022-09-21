@@ -12,7 +12,7 @@ An Indicator for calculating a company's distress a.k.a solvency
 this model relies on accumulation of  5 different Accounting Ratios
 
 
-this model assumes:
+This model assumes:
 -  All data are correct ( no scenario for data manipulation)
 -  No additional, Sudden Emergency Cash Inflows (i.e. Bank loans, or bonds )
 
@@ -30,9 +30,6 @@ hence, this model is, by no means, realistic, or suitable for the real world
   doi={10.18052/www.scipress.com/ILSHS.26.92}}
   ```
 
-## License
-
-you can access the license from [here](src/LICENSE.md)
 
 ## Disclaimer
 this is for Educational purposes only
@@ -41,5 +38,5 @@ The author is Not Held Responsibale, at all costs
 
 ## Author
 
-[![Logo](https://github.com/adamwillisXanax/adamwillisXanax/blob/main/Assets/logo.png)
-](https://github.com/adamwillisXanax/adamwillisXanax)
+[![Logo](https://github.com/adamwillisMastery/adamwillisMastery/blob/main/Assets/logo.png)
+](https://github.com/adamwillisMastery/adamwillisMastery)
