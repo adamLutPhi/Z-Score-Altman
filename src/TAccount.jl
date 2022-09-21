@@ -27,7 +27,7 @@ function DrAccount(drAccount,accountOperation)
 """
 unlike in electronics:
 
-if same direction (Dr DrAccount [DrAccount with Debit(Dr) Operation ] ) -> amicable relationshipe (+)
+if same direction (Dr DrAccount [DrAccount with Debit(Dr) Operation ] ) -> amicable relationship (+)
 if different (Cr DrAccount [DrAccount with Credit(Cr) ] ) -> repulsive relationship (-)
 
 Debit-Specific account operations
@@ -95,8 +95,6 @@ function CreditAccount(date, account ,amount)
 
 
 end
-
-
 
 
 
