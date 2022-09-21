@@ -1,23 +1,115 @@
-# TODO: add paper credits...
+# credits :
 using Missings;
 using DataFrames;
 global prompt = "Please enter "
-global message = ""
-
+global message = "ERROR, Please check input "
+global decimalMsg =  "Input is Null , please insert a decimal value "
+global msg = "ERROR: Unexpected Error : "
 """
 
 """
 ##=#  program main
 
 #totalAssets goes into: X1, X2, X3, & X5
-function main()
 
-print("welcome to Altman z-score - Julia Edition!\n")
 
+# divide by
+
+
+# Decimal value
+
+""" rounds to the 2nd decimal digit
+"""
+function DecimalVal(_string,d=2)
+    _decimal = round(_string, digits=d)
+    return _decimal
+end
+
+
+
+#--- string functions
+
+function isEmpty(_string)
+    if _string == "":
+        return true
+    elseif _string !=""
+        return false
+    else
+        @error msg + exception=(UnExpectedError, catch_backtrace())
+
+    end
+
+end
+
+function isNULL(_string)
+
+    if isnull(_string) == true
+        return true
+    elseif isnull(_string) == false
+        return false
+    else
+        @error msg + exception=(UnExpectedError, catch_backtrace())
+
+    end
+end
+
+"""
+returns the rational part of numerator & denominator
+
+```
+inputs:
+    * **numerator**
+    * **denominator**
+```
+
+```
+outputs:
+    * **result**: a rational result of dividing numerator, over denominator
+```
+
+"""
+function divideBy(numerator, denominator)
+    #check inputs not null
+    result = nothing
+    if isNULL(numerator) == false && isNULL(denominator) ==false &&
+        if isEmpty(numerator) ==false && isEmpty(denominator) == false
+    #result = numerator //
+            result = numerator // denominator
+            end
+    #end
+end
+
+"""
+reads input from user
+"""
+function readString(stringInput, decimalsAllowed=2)
+
+    _decimal= 0.0
+    try
+        _decimal =tryparse(Float64, Input("$prompt " + DecimalVal(stringInput,decimalsallowed)+"\n"))
+
+        if isnull(_decimal) == true
+            println(" "+decimalMsg+" ")
+
+        elseif isnull(_decimal) == false
+            return _decimal
+        else
+            throw(UnExpectedError)
+        end
+    catch UnExpectedError
+        @error "ERROR: Please recheck input: " exception=(UnExpectedError, catch_backtrace())
+
+
+     end
+
+end
+
+#----
 #TODO: refactor complete program here ...
-totalAssets = passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
-totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
-totalLiabilities = passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
+"""
+totalAssets = passmissing(readString)
+totalCapital =  passmissing(readString).
+totalLiabilities = passmissing(readString).
 
 sales, earnings, retainedEarnings = calcsales_earnings()
 #TODO: calculate z
@@ -26,9 +118,10 @@ score = z_handling(z)
 
 #TODO: decision making (i.e. what to do about it )
 
-resutlt = z_result(score)
+result = z_result(score)
 
 end
+"""
 
 #--- Result: Decision making: based on paper
 """
@@ -41,7 +134,7 @@ function z_result(score)
 
     me: note: however, how Sure is "Sure" [That is (the Real) Question!]
 """
-function z_result(score)
+function getZ_decision(score)
     decision = ""
 
         if score < 1.18
@@ -62,7 +155,8 @@ totalAssets = passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
 #totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
 totalLiabilities = passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
 
-    return totalAssets - totalLiabilities  # Capital
+    capital = totalAssets - totalLiabilities  # Capital
+    return totalAssets, totalLiabilities, capital
 end
 
 function calcsales_earnings()
@@ -73,11 +167,13 @@ sales = passmissing(parse).(Float64, input("$prompt 'Sales'\n"))
 earnings = passmissing(parse).(Float64, input("$prompt 'Earnings'\n"))
 retainedEarnings = passmissing(parse).(Float64, input("$prompt 'Retained Earnings'\n"))
 
-    return  (sales, earnings, retainedEarnings) #(sales, earnings, retainedEarnings)
+    return  sales, earnings, retainedEarnings #(sales, earnings, retainedEarnings)
 end
 
 #--- Altman Coefficients a1, a2, ..., an
 
+weightVariables = [a1=1.2 , a2=1.4 , a3=3.3 , a4=0.6 ,a5 = 0.999]
+# requires more work
 function altmanCoeffs(totalAssets,totalLiabilities, workingCapital,
     retainedEarnings, earnings, sales,
       a1=1.2 , a2=1.4 , a3=3.3 , a4=0.6 ,a5 = 0.999 )
@@ -85,28 +181,52 @@ function altmanCoeffs(totalAssets,totalLiabilities, workingCapital,
 Altman Coeffecient formula
 parameters: are changeable, as requeired
 sums up Altman's z-score equation (as provided in the enclosed academic paper)
+Requires:
+1. totalAssets
+2. totalLiabilities
+3. workingCapital
+4. retainedEarnings
+5. earnings
+6. sales
+
 """
-    return z = a1 * X1(totalAssets,workingCapital) #req:working capiyal
-    +a2 * X2(totalAssets,retainedEarnings)
-    + a3 * X3(totalAssets,earnings)
+    capital = copy(calcCapital(totalAssets,totalLiabilities))
+    workingCapital
+
+    z = a1 * X1(,workingCapital,totalAssets) #req:working capiyal
+    +a2 * X2(,retainedEarnings,totalAssets)
+    + a3 * X3(,earnings,totalAssets)
     + a4 * X4(capital, totalLiabilities) # X4 = capital / totalLiabilities
     + a5 * X5(sales, totalAssets)
+
+    return z
 
 end
 
 #--- altoman Coefficients
-# DONE  # me: ready to serve (on a sliver platter )
-
-function altmanCoeffs(currentAssets,currentLiabilities,totalAssets,
-    retainedEarnings,earnings,totalLiabilities,sales )
-
+# DONE  # me: ready to serve
 """
 returns Altman's Coefficients
 
 returns x1, x2, x3, x4, x5
 
 """
-workingCapital = calcWorkingCapital()
+function altmanCoeffs(currentAssets,currentLiabilities,totalAssets,
+    retainedEarnings, earnings,
+    totalLiabilities,sales )
+
+    capital = copy(calcCapital(totalAssets,totalLiabilities))
+    workingCapital = calcWorkingCapital(currentAssets,currentLiabilities)
+    x1 = X1(workingCapital,totalAssets)
+
+    x2 = X2(retainedEarnings, totalAssets)
+    x3 = X3(earnings, totalAssets)
+    x4 = X4(capital,totalAssets)
+    x5 = X5(sales,totalAssets)
+
+    return x1, x2, x3,x4,x5
+
+end
 
 """
 calculates working capital from
@@ -114,9 +234,20 @@ calculates working capital from
 2. Current Liabilities
 
 """
-assets = abs(currentAssets)
-liabilities = abs(currentLiabilities)
-workingCapital = max(assets , abs(liabilities) - min( assets, liabilities )
+function calcCurrentCapital(currentAssets,currentLiabilities) #Crucial
+cAssets = abs(currentAssets)
+cLiabilities = abs(currentLiabilities)
+
+
+#--- Capital function s
+"""
+1. workingCapital
+2. sales & Earnings
+
+1. workingCapital = currentAssets - currentLiabilities
+
+"""
+workingCapital = max(cAssets , abs(cLiabilities) - min( cAssets, cLiabilities )
 
 captial  = calcCapital()
 
@@ -127,89 +258,117 @@ return x1, x2, x3, x4, x5
 end
 
 #--- prompt for accounting trinity : Assets, liabilities, &  Capital
-function main_3Accounts()
+
 """
+#=
 prompts user to Directly enter the 3 accounts:
 1. Capital
 2. Assets
 3. Liabilities
 
-"""
+=#
+function main_3Accounts()
+
 capital = passmissing(parse).(Float64, input("$prompt 'capital'\n")))
 liability  = passmissing(parse).abs(Float64, input("$prompt 'liability'\n")))
 asset  = passmissing(parse).abs(input("$prompt 'asset'\n"))
 
 return capital , liability,  asset
-
-#--- (Total) Assets
-
-function calcAssets()
-
 """
-calculates Assets, from Total Capital  & Liabilties
+#--- Asset functions
 
-Assets =  Capital - Liabilities
+# Total Assets
+"""
+
+calculates Assets, from Total Capital  & Liabilties
+    Assets =  Capital - Liabilities
+```
+input
+```
+1. totalCapital
+2. totalLiabilities
+
+
 
 Q. what if Capital is negative? #non-sense
 Q. what if Liabilities value is negative (more ) # rare #doesn't make much #sense
 
+```
+output
+```
 -Returns capital & liability [As is]
+
 """
+function calctotalAssets(totalCapital,totalLiabilities) # weird
+# if someone can get totalCapital, totalLiabilities then:
+# Assets = totalCapital - totalLiabilities
 
-capital = capital(totalCapital)
-liability = liability(totalLiabilities)
-
-return capital , liability
+    #totalcapital = capital(totalCapital) #
+    #liability = liability(totalLiabilities)
+    totalAssets =  totalCapital - totalLiabilities
+    return totalAssets
 
 end
 
-#---- calcAssets
-function calcAssets(totalCapital, totalLiabilities)
-
+# calcAssets
 """
-Calculates Assets from totalCapital, & TotalLiabilties
--takes their abstract values
+Calculates Assets (from totalCapital, & TotalLiabilties)
+
+```
+inputs:
 
 Q. what if Capital is Negative? (below 0 ) ( doesn't make sense) #non-sense
 Q. what if Liability is Negative? (more Accounts Recievables #busiess is Flourishing!)
-#what makes sense?
+
 
 """
 
-capital = capital(totalCapital) #TODO:check
-    
-liability = liability(totalLiabilities) #TODO: check
+# gettotoalAssets
+function gettotoalAssets()
 
-return capital , liability
+# Equation : capital = Assets - totalLiabilities
+    capital = capital(totalCapital)
 
-#---- calcAssets
+    liability = liability(totalLiabilities)
+
+    return capital , liability
+end
+
+#  calcAssets
 function calcAssets(totalCapital, totalLiabilities)
 
-"""
-Tampering with the accounts' values is  Crucial
-i.e. do not change the accounts' negative values
-(it is normal for accounts to have both negative & Positive values)
-(requires further handling)
+    """
+    Handling the accounts' values is  Crucial
+    i.e. do not change the accounts' negative values
+    (it is normal for accounts to have both negative & Positive values)
+    (requires further handling)
 
-"""
-capital = capital(totalCapital)  #  abs(capital)
-      
-liability = liability(totalLiabilities)  # abs(totalLiabilities)
+    """
+    capital = capital(totalCapital)  #  abs(capital)
 
-return capital, liability
+    liability = liability(totalLiabilities)  # abs(totalLiabilities)
+
+    return capital, liability
+end
+
 #----
-
-
+"""
 # max(capital , liability)
 #return max(capital, liability) - min(capital, liability)
+
 return  capital - liability
 end
-#--- currentassets
+"""
 
-currentAssets = currentassets() #input("please enter 'Current Assets' ")
+# currentassets
 
+currentAssets = getCurrentAssets() #input("please enter 'Current Assets' ")
+
+#should debug
 function currentassets() # returns a (decimal) Number
     """
+    calculates currentAsset , from user prompt
+    !!!note:
     Depreciation, nowadays, is 3 years, due to tech. Development
     Average Utilization in accounting books was 5 years
     but with Tech. Adcancement, it is safe to say it's more like 3 years on Average)
@@ -232,64 +391,122 @@ function currentassets() # returns a (decimal) Number
     treasuryNotes = passmissing(parse).(Float64, input("$prompt 'Treasury Notes'\n"))
     other = passmissing(parse).(Float64, input("$prompt 'Other'\n"))
 
-    return  accountsReceivable + inventory + securities + commercialPaper +
+    currentAssets =   accountsReceivable + inventory + securities + commercialPaper +
             treasuryNotes + other
+
+    return currentAssets
 end
 
 ## --- calculates Working Capital (from currentLiabilities & current Capital)
 
-#--- currentLiabilities
-function currentliabilities()
+#--- Liabilities
+
+# currentLiabilities
 """
-Prompts the User to enter the following:
-     1. notespayable 
+```
+inputs
+```
 
-     2. accountspayable
-
-     3. currentLiabs
-
--returns
+```
+outputs:
+    - CurrentLiabilities: returns a tuple
+```
 """
+function getCurrentLiabilities()
+    #
+end
+function calcCurrentLiabilities(notesPayable,accountsPayable,accruedExpense,unearnedRevenue,longtermDebt)
+    """
+    Prompts the User to enter the following:
+         1. notespayable
 
-notesPayable , accountsPayable , accruedExpense , unearnedRevenue , longtermDebt = currentliabilities()
-      
-currentLiabilities = abs(notesPayable) + abs(accountsPayable) + abs(accruedExpense) + abs(unearnedRevenue) + abs(longtermDebt)
+         2. accountspayable
 
-#---workingCapital
+         3. currentLiabs
 
-function workingCapital(currentAssets,  currentLiabilities)
-workingCapital =  calcCapital(currentAssets, currentLiabilities)
-print("Working Capital is:  $workingCapital !")
+    -returns
+    """
 
-return workingCapital
+    notesPayable , accountsPayable , accruedExpense , unearnedRevenue , longtermDebt = currentliabilities()
+    #currentLiabilities = abs(notesPayable) + abs(accountsPayable) + abs(accruedExpense) + abs(unearnedRevenue) + abs(longtermDebt)
+
+    currentLiabilities = notesPayable + accountsPayable +  accruedExpense + unearnedRevenue + alongtermDebt
+
+    return currentLiabilities
+
+
+#--- capital (Equity)
+
+# workingCapital
+
+"""
+```
+inputs:
+    nothing
+    !!!note: function prompts user, for string input
+```
+
+
+```
+outputs:
+    - workingCapital: a tuple, of user capital object items
+```
+"""
+function getworkingCapital()
+    #TODO: handle user input string
+    workingCapital = nothing
+
+    return workingCapital
 end
 
-##  --- Accounting Ratios 
-      
-#= X1 = working Capital / total assets # Current Assets without current Liabilities / total Assets 
-      
+function calcworkingCapital(currentAssets,  currentLiabilities)
+    workingCapital =  calcworkingCapital(currentAssets, currentLiabilities)
+    print("Working Capital is:  $workingCapital !")
+
+    return workingCapital
+end
+
+#--- Altman cutt-off z
+
+X1 =lambda:  = workingCapital() / totalAssets
+
+# X2 = lambda: retainedEarnings, totalAssets  = retainedEarnings/ retainedEarnings
+
+X2 =lambda:  =  retainedEarnings / totalAssets
+
+# X3 = earnings / total assets
+
+X3 =lambda:  =  earnings / totalAssets
+
+X4 = lambda:  =  equity(capital) / totalAssets
+
+# X5 =
+##  --- Accounting Ratios
+
+#= X1 = working Capital / total assets # Current Assets without current Liabilities / total Assets
+
  TODO: [Working Capital needs to be shown]
-      
+
 - currentAssets: any asset that will
 provide an economic value for or
  within one year
  =#
-      
+
 #=
-      
+
 X1 = workingCapital / totalAssets
 
-# X2 = retained earnings / total assets
+# X2 = retained earnings / totalAssets
 
 X2 = retainedEarnings / totalAssets
 
-# X3 = earnings / total assets
-      
+# X3 = earnings / totalAssets
+
 X3 = earnings / totalAssets
 
-# X4 = equity(capital) / total liabilities
+# X4 = totalequity(capital) / total liabilities
 
-X4 = capital / totalLiabilities
+X4 = (Total)capital / totalLiabilities
 
 # X5 = sales / total assets
 
@@ -302,54 +519,84 @@ Reality:
 
 TOTALAssets * (X1() +X2() +X3() +X4() +X5() )= workingCapital+ retainedEarnings + earnings
 + (Capital*totalAssets) /totalLiabilites + Sales
+=#
+#--- z cutt-off Handling
 
-=# #Well-DONE! #<- double-check
-      
-#--- Altman
-      
+function z_handling(z)
+    if z < 1.18 # Below: Less `Assets` more `Liabilities`
+        decision="Distress"
+    elseif z> 1.81 && z < 2.99
+        decision="Gray Zone"
+    elseif z > 2.99 # Above: more `Assets`, less `Liabilities` -> more likely to be in the Safe Zone
+        decision="Safe Zone"
+    else end
+ return z,decison
+end
+ #Well-DONE! #<- double-check
+
+
+
 ##current Assets
 
 #function altman(totalAssets, sales )
 
-function currentassets() #DONE
-cassets= passmissing(parse).(Float64, input("please enter Current Assets "))
-# null -double check 
+function getCurrentAssets() #DONE
+    #TODO:
+# cassets= passmissing(parse).(Float64, input("please enter Current Assets "))
+# null -double check
 return cassets
 end
 
+function calcCurrentAssets(currentAssets)
+    currentAssets =  currentAssets.cash+ currentAssets.accountsPayable +
+    currentAssets.+ currentAssets.
+    currentAssets.
+
+    currentLiabilities
+end
 casset = currentassets()#can't cappen in real life - mak=yebe in a purple parallel Universe # user copys pastes from a company's brouchoure under inveestor-relations -  applicable 100%
 end #correctly returns cAsserts ok
 
-cliabilities = currentliabilities()
 
 #--- current liabilities
 function calcLiabilities(totalAssets,totalCapital)
 """
 calculates Liabilities (from total Assets & total Capital)
 
-      the Point: the company may Be 
-we do NOT Know which is larger, assets or capital (nor which is negative or positive) - [ use min & max]
+      the Point: the company may have Liabilities above Capital
+we do NOT Know which is larger, Assets or Capital (nor which is negative or positive) - [ use min & max]
 
 Hint: Q.  what if sign is major, more important than abstract
 
 asset = abs(totalAssets); capital = abs(totalCapital);
-return max(asset, capital) - min(asset, capital)
+return max(Asset, Capital) - min(Asset, Capital)
 
 """
+# cliabilities = currentliabilities()
+
 asset = abs(totalAssets); capital = abs(totalCapital)
-      
+
 totalLiabilities = max(asset, capital) - min(asset, capital)
 
 return totalLabilties
 
 end
 
-#--- current Liabilities
+#---  Liabilities
 #notesPayable, accountsPayable, accruedExpense,unearnedRevenue, longtermDebt
 
-function currentliabilities()
+##--- totalLiabilites
+
+##--- currentLiabilities
+
+# useful (funtion declaration )
 """
+```
+inputs:
+reads user input
+```
 Assumptions:
+prompts user for input
  -calculates current liabilities (it's the same for companies or personal accounts )
  -calculates different short-term liabilitues below 1 year through:
 
@@ -359,21 +606,42 @@ Assumptions:
     4. Unearned Revenue
     5. Long-term Debt
 
-- Returns: notesPayable , accountsPayable , accruedExpense , unearnedRevenue , longtermDebt
+```
+output:
+```
+- Returns:
+(notesPayable , accountsPayable , accruedExpense ,
+unearnedRevenue , longtermDebt)
 
 """
-
+function getCurrentLiabilities()
+    #TODO:
     notesPayable =  passmissing(parse).(Float64, input("$prompt 'Notes Payable'\n"))
     accountsPayable = passmissing(parse).(Float64, input("$prompt 'Accounts Payable'\n"))
     accruedExpense = passmissing(parse).(Float64, input("$prompt 'Accrued Expense'\n"))
     unearnedRevenue = passmissing(parse).(Float64, input("$prompt 'Unearned Revenue'\n"))
     longtermDebt = passmissing(parse).(Float64, input("$prompt 'Long-term Debt'\n"))
 
-    return  notesPayable , accountsPayable , accruedExpense , unearnedRevenue , longtermDebt
+    return
+    (notesPayable , accountsPayable , accruedExpense,
+    unearnedRevenue , longtermDebt)
+end
+function calcCurrentLiabilities(
+    notesPayable,accountsPayable,accruedExpense,unearnedRevenue,longtermDebt)
+    currentLiabilities = notesPayable+accountsPayable + accruedExpense + unearnedRevenue + longtermDebt
+    return currentLiabilities
+end
+
+function calcCurrentLiabilities(currentLiabilities)
+    currentLiabilities =  currentLiabilities.notesPayable+ currentLiabilities.accountsPayable +
+    currentLiabilities.accruedExpense+ currentLiabilities.unearnedRevenue
+    currentLiabilities.longtermDebt
+
+    currentLiabilities
 end
 
 #=
-    
+
 #---
 function WorkingCapital()
     """
@@ -391,83 +659,140 @@ return workingCapital
 end # returns workingCapital
 =#
 
-#--- z Handling
-function z_handling(z) 
-    if z < 1.18 # Below: Less `Assets` more `Liabilities` 
-        decision="Distress"
-    elseif z> 1.81 && z < 2.99
-        decision="Gray Zone" 
-    elseif z > 2.99 # Above: more `Assets`, less `Liabilities` -> more likely to be in the Safe Zone 
-        decision="Safe Zone"
-    else end
- return (z,decison)
-end
 
 
 
 
 
 #--- functions
- 
-    
-function currentAssets() # includes many mini-functions
-accountsReceivable() = passmissing(parse).(Float64, input( "$accountsReceivable" ) ) # 1. Accounts Receivable
-inventory() = passmissing(parse).(Float64, input( " $inventory" ) ) # 2. Inventory 
-Securities() =passmissing(parse).(Float64, input( " $Securities" ) ) # 3. Securities 
-commercialPaper() = passmissing(parse).(Float64, input( " $commercialPaper" ) ) # 4. Commercial Paper 
-treasuryNotes() = passmissing(parse).(Float64, input( " $TreasuryNotes" ) ) # 5. TreasuryNotes
-other() = passmissing(parse).(Float64, input( " $other " ) ) #5. other Current Assets 
-return currentasserts =  accountsReceivable,  inventory, Securities, commercialPaper,treasuryNotes,other
+
+#preferred
+
+"""
+
+reads Cash, accountsReceivable, inventory, Securities commercialPaper, treasuryNotes, other
+
+source: Prepaid expenses
+"""
+
+function getCurrentAssets() # includes many mini-functions
+
+    Cash =  passmissing(parse).(Float64, Cash and cash equivalents ) ) # 1. Accounts Receivable
+    accountsReceivable= passmissing(parse).(Float64, input( "$accountsReceivable" ) ) # 1. Accounts Receivable
+    inventory = passmissing(parse).(Float64, input( " $inventory" ) ) # 2. Inventory
+    Securities =passmissing(parse).(Float64, input( " $Securities" ) ) # 3. Securities
+    commercialPaper = passmissing(parse).(Float64, input( " $commercialPaper" ) ) # 4. Commercial Paper
+    treasuryNotes = passmissing(parse).(Float64, input( " $TreasuryNotes" ) ) # 5. TreasuryNotes
+    other = passmissing(parse).(Float64, input( " $other " ) ) #5. other Current Assets
+    #    return currentasserts,  accountsReceivable,  inventory, Securities, commercialPaper,treasuryNotes,other
+    return
+    (Cash, accountsReceivable,  inventory,  Securities,
+     commercialPaper,treasuryNotes,other)
+
 end
 
-    
-function calccurrentAssets() #args
- return    accountsReceivable() + inventory() + Securities() + commercialPaper() + treasuryNotes() + other()
+"""
+
+!!!note: other is optional (some companies may include other  not mention objects,
+ value is calculated into other, seperately, then passed into this function  )
+"""
+function calccurrentAssets(cash,accountsReceivable,inventory,Securities,commercialPaper,treasuryNotes,other=0) #args
+
+    currentAssets = cash+accountsReceivable + inventory + Securities +commercialPaper+treasuryNotes+other
+    return currentAssets
 end
 
-    
-function nonCurrentAssets() # working
+#preferred
+function getnonCurrentAssets() # working
 
     return passmissing(parse).(Float64, input( " nonCurrentAssets" ) )
 end
 
-    
-function calAssets()
-    """
-    Assets  = Current (less than the  bussiness's set timespan)+ non-current Asset (more he  bussiness's set timespan  )
-    """
-    return calccurrentAssets() , nonCurrentAssets()
+"""
+
+Assets  = Current (less than the  bussiness's set timespan)+ non-current Asset (more he  bussiness's set timespan  )
+"""
+function calcAssets(cash, accountsReceivable,inventory,Securities,commercialPaper,treasuryNotes,other)
+    currentAssets = calccurrentAssets(accountsReceivable,inventory,Securities,commercialPaper,treasuryNotes,other)
+
+    nonCurrentAssets = calcNonCurrentAssets()
+    return currentAssets nonCurrentAssets
 end
 
-    
-function calcLiabilities()
-"""
-Accounts
-"""
-currentliabs = currentliabilities() #done
-noncurrentliabs = passmissing(parse).(Float64, input("$prompt ' non Current Liabilities'"))
-return currentliabs , noncurrentliabs
+#
+function getLiabilities()
+    """
+    calculates current, non-current liabilities
+    Accounts
+    ```
+    inputs:
+    Nothing
+    !!! note: prompts user for input 2 values:
+        -currentliabs
+        -noncurrentliabs
+    ```
+
+    """
+    currentliabs = currentliabilities() #done
+    noncurrentliabs = tryparse(Float64,( Input("Enter non current liabilities: ")))
+    .(Float64, input("$prompt ' non Current Liabilities'"))
+    return currentliabs , noncurrentliabs
 
 end
-    
+
 #end  of Assets -----
-function parsing() 
+# Depreciate
+"""
+function parsing()
     return passmissing(parse).(Float64, input("$prompt ' a numeric variable '\n"))
     #return variable = passmissing(parse).(Float64, input('$prompt'))
 end
+"""
 
 function altmanCoeffs()
-     
-currentAssets, , non_CurrentAssets = calAssets() # 1. get current, non-Current Assets 
-      
-Assets = currentAssets + non_CurrentAssets # 2. sum them up, into Assets 
-      
-currentliabs , non_CurrentLiabs = calcLiabilities() # get Current, non-Current Liabilities 
-      
-Liabilities = currentliabs + noncurrentLiabs # sum them up, into Liabilities
-      
-z_handling(z)
-      
-return altmanCoeffs() 
+
+    currentAssets, , non_CurrentAssets = calAssets() # 1. get current, non-Current Assets
+
+    Assets = currentAssets + non_CurrentAssets # 2. sum them up, into Assets
+
+    currentliabs , non_CurrentLiabs = calcLiabilities() # get Current, non-Current Liabilities
+
+    Liabilities = currentliabs + noncurrentLiabs # sum them up, into Liabilities
+
+    z_handling(z)
+
+    return altmanCoeffs()
+end
+
+
+function main()
+    print("welcome to Altman z-score - Julia Edition!\n")
+
+# Assets
+totalAssets = getTotalAssets(TotalLiabilities,totalCapital)
+
+#currentAsset
+CurrentAssets = getCurrentAssets() #read input & returns a tuple
+calcCurrentAssets(CurrentAssets) # detuple inside
+
+nonCurrentAssets = getnonCurrentAssets()
+
+calcnonCurrentAssets(nonCurrentAssets)
+
+# currentLiabs demo
+# getLiabilities() #no such thing should exist
+
+# liabilities
+
+CurrentLiabilities =getCurrentLiabilities() # returns tuple
+calcCurrentLiabilities(CurrentLiabilities) #
+#noncurrenLiabs demo
+NonCurrentLiabilities = getNonCurrentLiabilities()
+calcNonCurrentLiabilities(NonCurrentLiabilities)
+
+totalLiabilities = getTotalLiabilities(totalAssets,totalCapital)
+
+getCurrentLiabilities()
+getnonCurrentLiabilities()
 
 end
