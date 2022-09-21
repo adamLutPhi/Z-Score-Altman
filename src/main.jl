@@ -11,17 +11,7 @@ global message = ""
 
 #totalAssets goes into: X1, X2, X3, & X5
 function main()
-"""
-General notes:
 
-Business timespan = 3 years in some books-due to rapid technological (change) factor
-                  = 5 years in other older books
-- the effective time Of Utilizing a particular Asset
-Whereaas each Asset could be used
-In other words, every asset has its own Utility Function (based on 'Economic Factors')
-
-"""
-print("hello World!\n")
 print("welcome to Altman z-score - Julia Edition!\n")
 
 #TODO: refactor complete program here ...
@@ -124,7 +114,8 @@ calculates working capital from
 2. Current Liabilities
 
 """
-assets = abs(currentAssets); liabilities = abs(currentLiabilities)
+assets = abs(currentAssets)
+liabilities = abs(currentLiabilities)
 workingCapital = max(assets , abs(liabilities) - min( assets, liabilities )
 
 captial  = calcCapital()
@@ -186,6 +177,7 @@ Q. what if Liability is Negative? (more Accounts Recievables #busiess is Flouris
 """
 
 capital = capital(totalCapital) #TODO:check
+    
 liability = liability(totalLiabilities) #TODO: check
 
 return capital , liability
@@ -201,6 +193,7 @@ i.e. do not change the accounts' negative values
 
 """
 capital = capital(totalCapital)  #  abs(capital)
+      
 liability = liability(totalLiabilities)  # abs(totalLiabilities)
 
 return capital, liability
@@ -215,10 +208,9 @@ end
 
 currentAssets = currentassets() #input("please enter 'Current Assets' ")
 
-function currentassets() # returns Number
+function currentassets() # returns a (decimal) Number
     """
-    Depreciation, nowadays, is 3 years, due to tech. Development, &
-    major Quantum advancement (especially Quant Physics)
+    Depreciation, nowadays, is 3 years, due to tech. Development
     Average Utilization in accounting books was 5 years
     but with Tech. Adcancement, it is safe to say it's more like 3 years on Average)
     thus a tech product (i.e. pc, workstation, server, ...)
@@ -228,9 +220,9 @@ function currentassets() # returns Number
     1. Accounts Receivable [Ones owning you (in $ cash) ]
     2. Inventory [ (sellable) Product/ (marketable) Service]
     3. Marketable Securities
-    4.  Commercial Paper
-    5.  Treasury Notes
-    6.  Other Instruments
+    4. Commercial Paper
+    5. Treasury Notes
+    6. Other Instruments
 
     """
     accountsReceivable  = passmissing(parse).(Float64, input("$prompt 'Accounts Receivable '\n"))
@@ -244,13 +236,13 @@ function currentassets() # returns Number
             treasuryNotes + other
 end
 
-## --- calculates working capital (from currentLiabilities & current Capital)
+## --- calculates Working Capital (from currentLiabilities & current Capital)
 
 #--- currentLiabilities
 function currentliabilities()
 """
 Prompts the User to enter the following:
-     1. notespayable
+     1. notespayable 
 
      2. accountspayable
 
@@ -260,9 +252,10 @@ Prompts the User to enter the following:
 """
 
 notesPayable , accountsPayable , accruedExpense , unearnedRevenue , longtermDebt = currentliabilities()
+      
 currentLiabilities = abs(notesPayable) + abs(accountsPayable) + abs(accruedExpense) + abs(unearnedRevenue) + abs(longtermDebt)
 
-#---workingCapital Capital Capital
+#---workingCapital
 
 function workingCapital(currentAssets,  currentLiabilities)
 workingCapital =  calcCapital(currentAssets, currentLiabilities)
@@ -271,14 +264,19 @@ print("Working Capital is:  $workingCapital !")
 return workingCapital
 end
 
-##  ---
-#= X1 = working Capital / total assets
- TODO: working Capital needs to be shown
-currentAssets: any asset that will
+##  --- Accounting Ratios 
+      
+#= X1 = working Capital / total assets # Current Assets without current Liabilities / total Assets 
+      
+ TODO: [Working Capital needs to be shown]
+      
+- currentAssets: any asset that will
 provide an economic value for or
  within one year
  =#
+      
 #=
+      
 X1 = workingCapital / totalAssets
 
 # X2 = retained earnings / total assets
@@ -286,6 +284,7 @@ X1 = workingCapital / totalAssets
 X2 = retainedEarnings / totalAssets
 
 # X3 = earnings / total assets
+      
 X3 = earnings / totalAssets
 
 # X4 = equity(capital) / total liabilities
@@ -299,19 +298,22 @@ X5 = sales / totalAssets
 return X1,X2,X3,X4,X5  - #wishful thinking
 end
 
-Reality;
+Reality:
 
-TOTALAssets * (X1+X2()+X3()+X4()+X5())= workingCapital+ retainedEarnings+ earnings
-+Capital*totalAssets /totalLiabilites + Sales
+TOTALAssets * (X1() +X2() +X3() +X4() +X5() )= workingCapital+ retainedEarnings + earnings
++ (Capital*totalAssets) /totalLiabilites + Sales
 
-=# #Well-DONE! #<- double-checked
+=# #Well-DONE! #<- double-check
+      
 #--- Altman
+      
 ##current Assets
 
 #function altman(totalAssets, sales )
+
 function currentassets() #DONE
 cassets= passmissing(parse).(Float64, input("please enter Current Assets "))
-# null - nill chg to double
+# null -double check 
 return cassets
 end
 
@@ -323,9 +325,10 @@ cliabilities = currentliabilities()
 #--- current liabilities
 function calcLiabilities(totalAssets,totalCapital)
 """
-calculates Liabilities from total Assets & total Capital
+calculates Liabilities (from total Assets & total Capital)
 
-we do NOT Know which is larger; Utilize Min, max (nor which is negative or positive)
+      the Point: the company may Be 
+we do NOT Know which is larger, assets or capital (nor which is negative or positive) - [ use min & max]
 
 Hint: Q.  what if sign is major, more important than abstract
 
@@ -333,8 +336,10 @@ asset = abs(totalAssets); capital = abs(totalCapital);
 return max(asset, capital) - min(asset, capital)
 
 """
-asset = abs(totalAssets); capital = abs(totalCapital);
+asset = abs(totalAssets); capital = abs(totalCapital)
+      
 totalLiabilities = max(asset, capital) - min(asset, capital)
+
 return totalLabilties
 
 end
@@ -368,10 +373,11 @@ Assumptions:
 end
 
 #=
+    
 #---
 function WorkingCapital()
     """
-    WorkingCapital() cadlag (continue a droite limite a gauche) -i.e. en: contine to right, limit on the left --i.e. non-negative process definition
+    WorkingCapital():
     current Assets - current Liabilites
 
     workingCapital could be positive (assets > liabilities)
@@ -385,14 +391,13 @@ return workingCapital
 end # returns workingCapital
 =#
 
-#--- z handling  finish the z --#Done!
-function z_handling(z) # when will you do? - YO like right NOW??? -- lemme check wikipedia first
-
-    if z < 1.18
+#--- z Handling
+function z_handling(z) 
+    if z < 1.18 # Below: Less `Assets` more `Liabilities` 
         decision="Distress"
     elseif z> 1.81 && z < 2.99
-        decision="Gray Zone"
-    elseif z > 2.99
+        decision="Gray Zone" 
+    elseif z > 2.99 # Above: more `Assets`, less `Liabilities` -> more likely to be in the Safe Zone 
         decision="Safe Zone"
     else end
  return (z,decison)
@@ -402,26 +407,31 @@ end
 
 
 
-#--- function
-function currentAssets() #hides lots of mini functions
-accountsReceivable() = passmissing(parse).(Float64, input( "$accountsReceivable" ) )
-inventory() = passmissing(parse).(Float64, input( " $inventory" ) )
-Securities() =passmissing(parse).(Float64, input( " $Securities" ) )
-commercialPaper() = passmissing(parse).(Float64, input( " $commercialPaper" ) )
-treasuryNotes() = passmissing(parse).(Float64, input( " $TreasuryNotes" ) )
-other() = passmissing(parse).(Float64, input( " $other " ) )
+#--- functions
+ 
+    
+function currentAssets() # includes many mini-functions
+accountsReceivable() = passmissing(parse).(Float64, input( "$accountsReceivable" ) ) # 1. Accounts Receivable
+inventory() = passmissing(parse).(Float64, input( " $inventory" ) ) # 2. Inventory 
+Securities() =passmissing(parse).(Float64, input( " $Securities" ) ) # 3. Securities 
+commercialPaper() = passmissing(parse).(Float64, input( " $commercialPaper" ) ) # 4. Commercial Paper 
+treasuryNotes() = passmissing(parse).(Float64, input( " $TreasuryNotes" ) ) # 5. TreasuryNotes
+other() = passmissing(parse).(Float64, input( " $other " ) ) #5. other Current Assets 
 return currentasserts =  accountsReceivable,  inventory, Securities, commercialPaper,treasuryNotes,other
 end
 
-function calccurrentAssets() #args)
- return    accountsReceivable() + inventory() + Securities() +commercialPaper()+treasuryNotes() + other()
+    
+function calccurrentAssets() #args
+ return    accountsReceivable() + inventory() + Securities() + commercialPaper() + treasuryNotes() + other()
 end
-#end
-function nonCurrentAssets() # working #"nonCurrentAssets")
+
+    
+function nonCurrentAssets() # working
 
     return passmissing(parse).(Float64, input( " nonCurrentAssets" ) )
 end
 
+    
 function calAssets()
     """
     Assets  = Current (less than the  bussiness's set timespan)+ non-current Asset (more he  bussiness's set timespan  )
@@ -429,27 +439,35 @@ function calAssets()
     return calccurrentAssets() , nonCurrentAssets()
 end
 
+    
 function calcLiabilities()
 """
-Acco
+Accounts
 """
-currentliabs = currentliabilities() #done # omg my fave guitar : golden silver , soft & tender.. yes & no my true love s eye autumns comming  -- ive got to sing write my heart -focus
+currentliabs = currentliabilities() #done
 noncurrentliabs = passmissing(parse).(Float64, input("$prompt ' non Current Liabilities'"))
 return currentliabs , noncurrentliabs
 
 end
+    
 #end  of Assets -----
-function parsing()#working
+function parsing() 
     return passmissing(parse).(Float64, input("$prompt ' a numeric variable '\n"))
     #return variable = passmissing(parse).(Float64, input('$prompt'))
 end
 
 function altmanCoeffs()
-currentAssets, , non_CurrentAssets = calAssets()
-Assets = currentAssets + non_CurrentAssets
-currentliabs , non_CurrentLiabs = calcLiabilities()
-Liabilities = currentliabs + noncurrentLiabs
+     
+currentAssets, , non_CurrentAssets = calAssets() # 1. get current, non-Current Assets 
+      
+Assets = currentAssets + non_CurrentAssets # 2. sum them up, into Assets 
+      
+currentliabs , non_CurrentLiabs = calcLiabilities() # get Current, non-Current Liabilities 
+      
+Liabilities = currentliabs + noncurrentLiabs # sum them up, into Liabilities
+      
 z_handling(z)
-return altmanCoeffs() # continue singing: round & round...  the burning circels , and then , the winter ....  # dislike please - golden sliver , all too soon - milk n honey, word & honeyyy# word * feels the cold weather]*
+      
+return altmanCoeffs() 
 
 end
