@@ -1,10 +1,10 @@
 # credits :
-using Missings;
-using DataFrames;
+#using Missings;
+#using DataFrames;
 global prompt = "Please enter "
 global message = "ERROR, Please check input "
 global decimalMsg =  "Input is Null , please insert a decimal value "
-global msg = "ERROR: Unexpected Error : "
+global msg = "ERROR: Unexpected Error - Please recheck input: "
 """
 
 """
@@ -21,8 +21,13 @@ global msg = "ERROR: Unexpected Error : "
 """ rounds to the 2nd decimal digit
 """
 function DecimalVal(_string,d=2)
-    _decimal = round(_string, digits=d)
-    return _decimal
+    _decimal = nothing
+    if isNULL(_string) == true
+        println("_string value is NULL, please check input,& try again later")
+    elseif isNULL(_string) == false
+        _decimal = round(tryparse(Float64,_string)::Float64, d) #digits=d)
+        return _decimal
+    end
 end
 
 
@@ -30,28 +35,39 @@ end
 #--- string functions
 
 function isEmpty(_string)
-    if _string == "":
-        return true
-    elseif _string !=""
-        return false
-    else
-        @error msg + exception=(UnExpectedError, catch_backtrace())
+    try
+
+        if _string == ""
+            return true
+        elseif _string !=""
+            return false
+        else
+            @error msg + exception=(UnExpectedError, catch_backtrace())
+
+        end
+
+    catch UnExpectedError
+        @error msg +  exception = (UnExpectedError, catch_backtrace())
 
     end
-
 end
 
 function isNULL(_string)
+    try
+        if isnull(_string) == true
+            return true
+        elseif isnull(_string) == false
+            return false
+        else
+            #@error msg + exception=(UnExpectedError, catch_backtrace())
+            throw(UnExpectedError)
+        end
+    catch UnExpectedError
+        @error msg  , exception = (UnExpectedError, catch_backtrace())
 
-    if isnull(_string) == true
-        return true
-    elseif isnull(_string) == false
-        return false
-    else
-        @error msg + exception=(UnExpectedError, catch_backtrace())
-
-    end
+     end
 end
+
 
 """
 returns the rational part of numerator & denominator
@@ -69,24 +85,29 @@ outputs:
 
 """
 function divideBy(numerator, denominator)
+
     #check inputs not null
     result = nothing
-    if isNULL(numerator) == false && isNULL(denominator) ==false &&
+    if isNULL(numerator) == false && isNULL(denominator) ==false #&&\
         if isEmpty(numerator) ==false && isEmpty(denominator) == false
-    #result = numerator //
+            #result = numerator //
             result = numerator // denominator
-            end
+        end
+    end
+    return result
     #end
 end
-
+#=
 """
 reads input from user
 """
+=#
+#=
 function readString(stringInput, decimalsAllowed=2)
 
     _decimal= 0.0
     try
-        _decimal =tryparse(Float64, Input("$prompt " + DecimalVal(stringInput,decimalsallowed)+"\n"))
+        _decimal =tryparse(Float64, Input(" $prompt " + DecimalVal(stringInput,decimalsAllowed)+"\n"))
 
         if isnull(_decimal) == true
             println(" "+decimalMsg+" ")
@@ -97,13 +118,80 @@ function readString(stringInput, decimalsAllowed=2)
             throw(UnExpectedError)
         end
     catch UnExpectedError
-        @error "ERROR: Please recheck input: " exception=(UnExpectedError, catch_backtrace())
+        @error "ERROR: Please recheck input: ", exception=(UnExpectedError, catch_backtrace())
 
 
      end
 
 end
+=#
+#line doesn't Debug (whether with input or Input as a function name)
+# use: readline -> SystemError: opening file "Please enter  ": No such file or directory
+#input: input not defined
+#import io.* # input not found
+#Takeaway:
+# Communication is `half-duplex`: i.e. one-way
+# Either write, or read commands are possible (but not both)
+"""
+source:https://discourse.julialang.org/t/string-as-a-variable-name/2195/6
+"""
+#=
+macro string_as_varname_macro(s::AbstractString, v::Any)
+	s = Symbol(s) # <----
+	esc(:($s = $v))
+end
+=#
+#credits to: @NickNack on discourse
+function string_as_varname(s::AbstractString,v::Any)
+         s=Symbol(s)
+         @eval (($s) = ($v))
+end
 
+function assignStingtoVal(_string)
+    varvalue = tryparse(Float64,_string)
+    var = string_as_varname(_string,varvalue)# now: _string = varvalue(_string here)
+
+    return var #(var, varvalue)
+end
+
+function ReadLine(_string)
+    # move to the outside scope
+    #var = string_as_varname(_string) #1. make var as string
+    #var = _string # 1. Assign string to this var
+    println(" $prompt $var") # 3. concatenate with  var's value
+    var = readline() # let user input
+    var = assignStingtoVal(_string)
+
+    return var # return the var
+
+end
+
+# redoing Readline here:
+stringInput = "stringInput"
+println(" $prompt $stringInput")
+stringInput =  readline() #tryparse(Float64, input("$prompt " + DecimalVal(stringInput,2)+"\n"))
+var1 =  assignStingtoVal(stringInput) #string_as_varname(stringInput)
+
+#_decimal = + DecimalVal(stringInput,2)
+function readString(stringInput)
+    _decimal= 0.0
+    try
+        _decimal =tryparse(Float64, input("$prompt " + DecimalVal(stringInput,2)+"\n")) #Input("$prompt " + DecimalVal(stringInput,2)+"\n"))
+
+        if isnull(_decimal) == true
+            println(" "+decimalMsg+" ")
+
+        elseif isnull(_decimal) == false
+            return _decimal
+        else
+            throw(UnExpectedError)
+        end
+    catch UnExpectedError
+        @error "ERROR: Please recheck input: ", exception=(UnExpectedError, catch_backtrace())
+
+
+     end
+end
 #----
 #TODO: refactor complete program here ...
 """
@@ -151,28 +239,31 @@ end
 #assets : read assets
 function calcCapital()
 
-totalAssets = passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
+totalAssets =  readString("total Assets") #passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
 #totalCapital =  passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
-totalLiabilities = passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
+totalLiabilities = readString("total Liabilities")  #passmissing(parse).(Float64, input("$prompt 'total Liabilities'\n"))
 
     capital = totalAssets - totalLiabilities  # Capital
     return totalAssets, totalLiabilities, capital
 end
 
-function calcsales_earnings()
+
 """
     Prompts user to enter: Sales,  Earnings  & Retained Earnings  (of a company)
 """
-sales = passmissing(parse).(Float64, input("$prompt 'Sales'\n"))
-earnings = passmissing(parse).(Float64, input("$prompt 'Earnings'\n"))
-retainedEarnings = passmissing(parse).(Float64, input("$prompt 'Retained Earnings'\n"))
+function calcsales_earnings()
 
-    return  sales, earnings, retainedEarnings #(sales, earnings, retainedEarnings)
+    sales = readString("Sale") #passmissing(parse).(Float64, input("$prompt 'Sales'\n"))
+    earnings = readString("Earnings") #passmissing(parse).(Float64, input("$prompt 'Earnings'\n"))
+    retainedEarnings = readString("Retained Earnings") #passmissing(parse).(Float64, input("$prompt 'Retained Earnings'\n"))
+
+        return  sales, earnings, retainedEarnings #(sales, earnings, retainedEarnings)
+
 end
 
 #--- Altman Coefficients a1, a2, ..., an
 
-weightVariables = [a1=1.2 , a2=1.4 , a3=3.3 , a4=0.6 ,a5 = 0.999]
+weightVariables = [1.2 , 1.4 , 3.3 , 0.6 , 0.999] #[a1=1.2 , a2=1.4 , a3=3.3 , a4=0.6 ,a5 = 0.999]
 # requires more work
 function altmanCoeffs(totalAssets,totalLiabilities, workingCapital,
     retainedEarnings, earnings, sales,
@@ -193,9 +284,9 @@ Requires:
     capital = copy(calcCapital(totalAssets,totalLiabilities))
     workingCapital
 
-    z = a1 * X1(,workingCapital,totalAssets) #req:working capiyal
-    +a2 * X2(,retainedEarnings,totalAssets)
-    + a3 * X3(,earnings,totalAssets)
+    z = a1 * X1(workingCapital,totalAssets) #req:working capiyal
+    +a2 * X2(retainedEarnings,totalAssets)
+    + a3 * X3(earnings,totalAssets)
     + a4 * X4(capital, totalLiabilities) # X4 = capital / totalLiabilities
     + a5 * X5(sales, totalAssets)
 
@@ -233,28 +324,33 @@ calculates working capital from
 1. Current Assets
 2. Current Liabilities
 
-"""
-function calcCurrentCapital(currentAssets,currentLiabilities) #Crucial
-cAssets = abs(currentAssets)
-cLiabilities = abs(currentLiabilities)
 
-
-#--- Capital function s
-"""
 1. workingCapital
 2. sales & Earnings
 
 1. workingCapital = currentAssets - currentLiabilities
 
+
 """
-workingCapital = max(cAssets , abs(cLiabilities) - min( cAssets, cLiabilities )
+function calcCurrentCapital(currentAssets,currentLiabilities) #Crucial
 
-captial  = calcCapital()
+    #treat those as dummy variables
+    cAssets = abs(currentAssets)
+    cLiabilities = abs(currentLiabilities)
+    #need to review related functions
 
-sales , earnings , retained_earnings =  calcsales_earnings()
+    #--- Capital function s
 
-x1, x2, x3, x4, x5 = altmanCoeffs()
-return x1, x2, x3, x4, x5
+    workingCapital = max(cAssets , abs(cLiabilities) ) - min( cAssets, cLiabilities  )
+
+    #captial  = calcCapital() #UncommentMe
+
+    # sales , earnings , retained_earnings =  calcsales_earnings()
+
+    # x1, x2, x3, x4, x5 = altmanCoeffs() # UncommentMe
+    x1, x2, x3, x4, x5 = nothing#,nothing,nothing,nothing,nothing #altmanCoeffs()
+
+# return x1, x2, x3, x4, x5
 end
 
 #--- prompt for accounting trinity : Assets, liabilities, &  Capital
@@ -351,6 +447,61 @@ function calcAssets(totalCapital, totalLiabilities)
     return capital, liability
 end
 
+##----
+#preferred
+
+"""
+
+reads Cash, accountsReceivable, inventory, Securities commercialPaper, treasuryNotes, other
+
+source: Prepaid expenses
+"""
+
+function getCurrentAssets() # includes many mini-functions
+    #TODO : remove passmissing, and
+
+    Cash =  readString("Cash") #passmissing(parse).(Float64, input("$Cash and cash equivalents" )) # 1. Accounts Receivable
+    accountsReceivable= readString("accountsReceivable") #passmissing(parse).(Float64, input( "$accountsReceivable" ) ) # 1. Accounts Receivable
+    inventory = readString("inventory") #passmissing(parse).(Float64, input( " $inventory" ) ) # 2. Inventory
+    Securities = readString("Securities") #passmissing(parse).(Float64, input( " $Securities" ) ) # 3. Securities
+    commercialPaper = readString("commercialPaper") #passmissing(parse).(Float64, input( " $commercialPaper" ) ) # 4. Commercial Paper
+    treasuryNotes = readString("treasuryNotes") #passmissing(parse).(Float64, input( " $TreasuryNotes" ) ) # 5. TreasuryNotes
+    other = readString("other") #passmissing(parse).(Float64, input( " $other " ) ) #5. other Current Assets
+    #    return currentasserts,  accountsReceivable,  inventory, Securities, commercialPaper,treasuryNotes,other
+    return
+    (Cash, accountsReceivable,  inventory,  Securities,
+     commercialPaper,treasuryNotes,other)
+
+end
+
+"""
+
+!!!note: other is optional (some companies may include other  not mention objects,
+ value is calculated into other, seperately, then passed into this function  )
+"""
+function calccurrentAssets(cash,accountsReceivable,inventory,Securities,commercialPaper,treasuryNotes,other=0) #args
+
+    currentAssets = cash+accountsReceivable + inventory + Securities +commercialPaper+treasuryNotes+other
+    return currentAssets
+end
+
+#preferred
+function getnonCurrentAssets() # working
+
+    return passmissing(parse).(Float64, input( " nonCurrentAssets" ) )
+end
+
+"""
+
+Assets  = Current (less than the  bussiness's set timespan)+ non-current Asset (more he  bussiness's set timespan  )
+"""
+function calcAssets(cash, accountsReceivable,inventory,Securities,commercialPaper,treasuryNotes,other)
+    currentAssets = calccurrentAssets(accountsReceivable,inventory,Securities,commercialPaper,treasuryNotes,other)
+
+    nonCurrentAssets = calcNonCurrentAssets()
+    return currentAssets, nonCurrentAssets
+end
+
 #----
 """
 # max(capital , liability)
@@ -376,7 +527,7 @@ function currentassets() # returns a (decimal) Number
     has a lifetime of 3 years, on Average
 
     Current Assets = Cash and Cash Equivalents
-    1. Accounts Receivable [Ones owning you (in $ cash) ]
+    1. Accounts Receivable [Ones owning you (in cash) ]
     2. Inventory [ (sellable) Product/ (marketable) Service]
     3. Marketable Securities
     4. Commercial Paper
@@ -468,17 +619,17 @@ end
 
 #--- Altman cutt-off z
 
-X1 =lambda:  = workingCapital() / totalAssets
+X1 = workingCapital() / totalAssets #lambda:  = workingCapital() / totalAssets
 
 # X2 = lambda: retainedEarnings, totalAssets  = retainedEarnings/ retainedEarnings
 
-X2 =lambda:  =  retainedEarnings / totalAssets
+X2 =   retainedEarnings / totalAssets #lambda:  =  retainedEarnings / totalAssets
 
 # X3 = earnings / total assets
 
-X3 =lambda:  =  earnings / totalAssets
+X3 = earnings / totalAssets #lambda:  =  earnings / totalAssets
 
-X4 = lambda:  =  equity(capital) / totalAssets
+X4 = equity(capital) / totalAssets #lambda:  =  equity(capital) / totalAssets
 
 # X5 =
 ##  --- Accounting Ratios
@@ -666,60 +817,8 @@ end # returns workingCapital
 
 #--- functions
 
-#preferred
 
-"""
 
-reads Cash, accountsReceivable, inventory, Securities commercialPaper, treasuryNotes, other
-
-source: Prepaid expenses
-"""
-
-function getCurrentAssets() # includes many mini-functions
-
-    Cash =  passmissing(parse).(Float64, Cash and cash equivalents ) ) # 1. Accounts Receivable
-    accountsReceivable= passmissing(parse).(Float64, input( "$accountsReceivable" ) ) # 1. Accounts Receivable
-    inventory = passmissing(parse).(Float64, input( " $inventory" ) ) # 2. Inventory
-    Securities =passmissing(parse).(Float64, input( " $Securities" ) ) # 3. Securities
-    commercialPaper = passmissing(parse).(Float64, input( " $commercialPaper" ) ) # 4. Commercial Paper
-    treasuryNotes = passmissing(parse).(Float64, input( " $TreasuryNotes" ) ) # 5. TreasuryNotes
-    other = passmissing(parse).(Float64, input( " $other " ) ) #5. other Current Assets
-    #    return currentasserts,  accountsReceivable,  inventory, Securities, commercialPaper,treasuryNotes,other
-    return
-    (Cash, accountsReceivable,  inventory,  Securities,
-     commercialPaper,treasuryNotes,other)
-
-end
-
-"""
-
-!!!note: other is optional (some companies may include other  not mention objects,
- value is calculated into other, seperately, then passed into this function  )
-"""
-function calccurrentAssets(cash,accountsReceivable,inventory,Securities,commercialPaper,treasuryNotes,other=0) #args
-
-    currentAssets = cash+accountsReceivable + inventory + Securities +commercialPaper+treasuryNotes+other
-    return currentAssets
-end
-
-#preferred
-function getnonCurrentAssets() # working
-
-    return passmissing(parse).(Float64, input( " nonCurrentAssets" ) )
-end
-
-"""
-
-Assets  = Current (less than the  bussiness's set timespan)+ non-current Asset (more he  bussiness's set timespan  )
-"""
-function calcAssets(cash, accountsReceivable,inventory,Securities,commercialPaper,treasuryNotes,other)
-    currentAssets = calccurrentAssets(accountsReceivable,inventory,Securities,commercialPaper,treasuryNotes,other)
-
-    nonCurrentAssets = calcNonCurrentAssets()
-    return currentAssets nonCurrentAssets
-end
-
-#
 function getLiabilities()
     """
     calculates current, non-current liabilities
@@ -735,7 +834,7 @@ function getLiabilities()
     """
     currentliabs = currentliabilities() #done
     noncurrentliabs = tryparse(Float64,( Input("Enter non current liabilities: ")))
-    .(Float64, input("$prompt ' non Current Liabilities'"))
+    #tryparse(Float64, input("$prompt ' non Current Liabilities'"))
     return currentliabs , noncurrentliabs
 
 end
@@ -747,11 +846,15 @@ function parsing()
     return passmissing(parse).(Float64, input("$prompt ' a numeric variable '\n"))
     #return variable = passmissing(parse).(Float64, input('$prompt'))
 end
+
+#uses functions (depreciated):
+calcLiabilities
+2. calAssets
 """
 
 function altmanCoeffs()
 
-    currentAssets, , non_CurrentAssets = calAssets() # 1. get current, non-Current Assets
+    currentAssets , non_CurrentAssets = calAssets() # 1. get current, non-Current Assets
 
     Assets = currentAssets + non_CurrentAssets # 2. sum them up, into Assets
 
@@ -759,9 +862,9 @@ function altmanCoeffs()
 
     Liabilities = currentliabs + noncurrentLiabs # sum them up, into Liabilities
 
-    z_handling(z)
+    #z_handling(z)
 
-    return altmanCoeffs()
+    #return     #altmanCoeffs()
 end
 
 
