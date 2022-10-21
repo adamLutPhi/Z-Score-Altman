@@ -1,3 +1,5 @@
-this Repo is nothing without you
+#Contributing
 
-if you can help, I'd be glad & content on sharing code with you 
+This Repo is nothing without your help
+
+If you can help, I would be glad  content sharing code with you
