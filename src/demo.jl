@@ -16,7 +16,7 @@ Description:
 - isNull()
 - isMissing()
 
-- @macro Name
+
 
 
 !!!Note: function `warn` has been added (which is called, instead of  calling `throw(error(msg)))`
