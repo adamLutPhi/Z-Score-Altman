@@ -291,7 +291,7 @@ end
 """ converts a string Input to its corresponding float64 represenation"""
 function convertToFloat(stringInput)
     decimalValue = tryparse(Float64, string(stringInput) ) #<-------
-    return decimalValue
+    decimalValue
 end
 
 # Sum(_vector)
@@ -300,7 +300,7 @@ function Sum(_vector)
     if isNull(_vector)
         throw(error(msg))
     end
-    return sum([i for i in 1:length(_vector)])
+    return sum([i for i in _vector]) #1:length(_vector)])
 end
 
 
@@ -308,14 +308,15 @@ end
 
 ## Mul(_vector)
 
-""" multiply each items of a vector """
+""" Multiply each item of a vector """
 function Mul(_vector)
 
     _mul=1
-     for i in 1:length(_vector)
+     for i in _vector
+        println("DEBUG - priority: item = ", i)
          _mul = _mul * i
      end
-     return _mul
+     _mul
 end
 
 
@@ -325,12 +326,12 @@ function Mul(vector1, vector2)
 
     listVectorMul = []
 
-     for i in 1:length(_vector1)
+     for i in _vector1, j in vector2 # 1:length(_vector1) #<---------
 
-        #1.
-        varMul =  vector1[i] * vector2[i]
+        #1. multiply items
+        varMul =  i * j  #vector1[i] * vector2[i]
 
-        #
+        #2. appendd to a `listVectorMul`
         append!(listVectorMul , varMul)
 
      end
@@ -340,35 +341,11 @@ function Mul(vector1, vector2)
 end
 
 
-#@Depreciate
-# string_as_varname(s::AbstractString,v::Any)
-#=
-# lvl1:
-#credits to: @NickNack on discourse
-function string_as_varname(s::AbstractString,v::Any)
-         s=Symbol(s)
-         @eval (($s) = ($v))
-end
-=#
-
-
-# assignVariableToValue(stringName, stringValue)
-
-"""
-source: https://discourse.julialang.org/t/string-as-a-variable-name/2195/6
-"""
-
-#lvl1
-
-macro macro_string_as_varname(s::AbstractString, v::Float64)  #::Any)
-	s = Core.Symbol(s) # <---- `Symbol`: from Core module (automatically imported)
-	esc(:($s = $v))
-end
-
 #lvl1
 macro Name(arg)
     string(arg)
 end
+
 
 #lvl1
 """ takes a string name , & a float value
@@ -391,14 +368,17 @@ function assignVariableToValue(stringName::AbstractString, varValue)
     stringName # eval(_variable) # or esc(:($_variable = $decimalValue))
 end
 
+
 function trimSpaces(inputString)
 
     if isNullOrMissing( inputString) == true
-        return ""
+        # Replace input, with  a  " space " string! [ isa character, i.e. a `space` " " ]
+        return " "
 
     elseif isNullOrMissing( inputString) == true
 
          inputString = removeSpaces2(inputString) #removeSpaces2(inputString)
+         #using julia built-in's for stripping the right, so do the left part of a string
          inputString = Base.lstrip(inputString)
          inputString = Base.rstrip(inputString)
     end
@@ -406,6 +386,8 @@ function trimSpaces(inputString)
     return inputString
 
 end
+
+
 # lvl3:
 #=
 ## assignVariableToValue(stringName, stringValue)
@@ -423,6 +405,8 @@ function assignVariableToValue(stringName, stringValue) # ready to be used
 
     return _variable #(stringName, decimalValue)
 end
+
+
 =#
 
 # handleNull
@@ -477,13 +461,13 @@ Output:
 
 """
 function handleNullName(stringInput,result="variable")
-    # A name should be
-    #varName = "" #<-----
-    isFaulty = isNullOrMissing(stringInput)
+
+    # string name should be not `null`("") or missing
+        isFaulty = isNullOrMissing(stringInput)
 
     if isFaulty == true
         # assign the result(by default it is a variable ) to `varName`
-        #!!!Note: transfrom `result` to string , whatever value it may have
+        #!!!Note: transfrom `result` to string , whatever value it may have been
     	stringInput = string(result) # already assigned
 
     elseif isFaulty == false
@@ -515,58 +499,8 @@ function handleNullName(_string, result="variable")
 
 end
 =#
-println(handleNullName("str","var"))
 
-#DEMO #1:
-resName = handleNullName("var")
-println("var is= ", resName)
-
-# Demo #2:
-varName = readVariableName()
-varName = handleNullName(varName)
-
-
-varValue  = readVariableValue() # 1
-varValue  = handleNullValue(varName) # 2
-
-
-#checkNullOrMissing(varName )
-
-#varName = handleNullOrMissing(varName)
-
-#1. read (input)
-varName = readVariableName()
-varValue = readVariableValue()
-
-#2 handle input
-
-varValue = readVariableValue(varName) # !!!note: varName as input to be displayed, is Optional
-
-#2. checking (& Handling)
-
-varName = handleNullName(varName)
-varValue = handleNullValue(varValue)
-
-#3. Assign to a variable
-#TODO: Assign them to each other [turn a string & decimal into a variable called $string ]
-varName = assignVariableToValue(varName,varValue) # now varName is a variable #TODO: return it
-
-# DEMO: isa($variable, Number)
-println("isa: debug#1: ",isa(440, Number))
-println("isa: debug#2: ",isa(440.20, Number))
-println("isa: debug#3: ",isa(440.201, Number)) # true  # fine
-println("isa: debug#4: ",isa(string(440.20), Number)) # false
-println("isa: debug#5: ",isa(string(440.20)*"a", Number)) # false value
-
-# DEMO: isNullOrMissing
-if isNullOrMissing("sth") == false # string was given
-    print("isNullOrMissing == false")
-end
-
-if isNullOrMissing("sth") == true
-    print("isNullOrMissing == true")
-end
-
+#=
 # createVariable
 
 """reads variable name, reads a variable value from user prompt, checks both inputs
@@ -598,68 +532,38 @@ function createVariable()
     return varName
 
 end
+=#
 
 println("handleNullName('') = ", handleNullName("" )) #works
 println("handleNullName(nothing) = ", handleNullName(nothing ))
 
-# createVariable
-## createVariable(_string)
-""" create a variable, prompts user with  a corresponding input string """
-function createVariable(_string) # practical
-    # create a variable : easy as 1,2,3
-    print("Debug: Enter create Variable")
+function processEmptyVariableName(isNullOrMissing)
 
-    #1. check input if null or missing (it's a string describing a (variable) name )
-    if isNullOrMissing(_string) == false
-        varName = _string     #readVariableName()
-    elseif isNullOrMissing(_string) == true
+    varname=""
+    if isNullOrMissing == true
+        println("Input was Null or Missing: please Insert a name for ",@Name(_string))
         varName = readVariableName(_string) # _string added as arg (new)
+
+    elseif isNullOrMissing == false
+    varName = _string
     end
-    #2. has two sub-parts:
-
-    #2.1 checking (& Handling) for the var Name
-
-    varName = handleNullName(varName) # !!!note: all spaces are trimmed, automatically
-
-    #2.2 handle input, for the value
-    varValue = readVariableValue(varName) # !!!note: `varName` as input, that's displayed, is Optional
-
-    #update: do not lowercase the variable name, keep everything as user intended
-    #varName = lowercase(varName) #i.e. leave the camelToes & capitals: "Cash" -> "cash"
-    varValue = handleNullValue(varValue)
-
-    #3. Assign to a variable
-    #- Assign them to each other [turns a string and decimal into a variable called $string ]
-    varName = assignVariableToValue(varName,varValue) # now varName is a variable #TODO: return it
-    return varName
+    return varname
 end
 
-## createVariable(_stringName, _value)
-""" create a variable, assigning a string, & a value to a newly created variable"""
-function createVariable(_stringName, _value=0.0) # more useful
+function processEmptyVariableValue(isNullOrMissing,_stringDecimal)
 
-    print("Debug: Enter create Variable")
+    #isNull = handleNullName(varName)
+    # !!!note: all spaces are trimmed, automatically
 
-    conditionName = isNullOrMissing(_stringName)
+    # return handle nullValue
+    handleNullValue(isNullOrMissing, _stringDecimal)
+    #= Do not repeat self
 
-    #1. check input if null or missing & handle it (it's a string describing a (variable) name )
-
-    varName = handleNullName(_stringName) #<---- returns nothing
-
-    varValue = handleNullValue(varName ) #<---
-
-
-    #2. Assign to a variable
-    #- Assign them to each other [turns a string and decimal into a variable called $string ]
-    varName = assignVariableToValue(varName,varValue) # now varName is a variable #TODO: return it
-    return varName
 end
+
 
 # readVariableName(varValue) # function takes 0 input argumentts
 #readVariableName()
-
-
-
 
 
 # checkNull
@@ -679,40 +583,31 @@ end
 ## isaAlphaString(inputResult)
 
 """
-# Credits: @tamasgal
-checks if input Only Contains Characters , in the form [a-z,A-Z]
-https://discourse.julialang.org/t/check-for-letters-only-string/41091/4
-#!!!note: isatoz is not a valid function (anymore  )
+
 """
 function isaAlphaString(inputResult) #Done
-    condition = isNotNumeric(inputResult) #isatoz(inputResult) # in the form "a-z,A-Z"
+
+    condition = isNotNumeric(inputResult) #isatoz(inputResult) # in the form "a-z,A-Z" #WARNING: non-Numeric does not mean #isNotNumeric
     if condition == false
         return false
     elseif condition == true
         return true
     end
 end
+=#
 
 # String Operations
 
 
-
 #--------------
 # Space detection & Handling
-#=
-## removeSpaces1
-"""
-credits: @isbarn
-stackOverFlow: Julia trinm string whitespace and check length
-"""#lvl1
-function removeSpaces1(inputString)
+function removeSpaces2(inputString) #useful
 
     _string = inputString #copy(inputString)
-
-    result = join(map(character -> !isspace(_string[character]) ? "" : _string[character], 1:length(_string)  ) )
+    #@credits: "Fengyang Wang"
+    result = filter(character -> !isspace(character), _string)
     return result
 end
-=#
 
 ## removeSpaces2
 """
@@ -721,9 +616,11 @@ end
 """#lvl1
 function removeSpaces2(inputString) #useful
 
-    _string = inputString #copy(inputString)
+     #copy(inputString)
+    #1. filter out characters, which are not spaces
     #@credits: "Fengyang Wang"
-    result = filter(character -> !isspace(character), _string)
+    result = filter(character -> !isspace(character), inputString)
+    #2. return results
     return result
 end
 
@@ -1003,28 +900,30 @@ end
 # checkInputIsValidOrRewind
 
 # promptValue()
+=#
+
+#--------
 
 """ Prompt user for input, then it's checked for being `null` or `missing` , if so, function rewinds"""
-function promptValue(_string) # rechecked #TODO: Triple-check
+function promptValue() # rechecked
 
-    #_string = ""
-     var = 0.0
-
+    _string = ""
+    var = 0.0
 
     # 1. Let User Input for a value
-    #_string= readline() #TODO: Triple-check: with or without this readline (as _string is provided in the input argument, assumes reading was done outside of the function's scopre)
+    println("Variable's value isn't provided: Please enter a valid `float` for the given variable ")
+    _string= readline()
 
+    condition = isNullOrMissing(_string)
     # 2. If stirng was nothing(""), missing or input was a string Name
-    if isNullOrMissing(_string) == true #||  isaAlphaString(var) == true
-        #TODO: Re-prompt user: ask him if he wants to rewind progrm ([Y]es / [N]o )
-
+    if  condition == true #||  isaAlphaString(var) == true
         # Rewind for user input [restart function], as it cannot be missing
         #set string to default
-        _string = "variableName"
+        _string = "variable"
         _string = assignVariableToValue(_string,var)
         return _string
     # 3. otherwise, `_string` is neither nothing(""), missing or a string Name
-    elseif isNullOrMissing(_string) == false #&& isaAlphaString(var) == false  # if input is valid
+    elseif condition  == false #&& isaAlphaString(var) == false  # if input is valid
 
         # 4. Convert `_string` to a `Float64`
 
@@ -1042,36 +941,33 @@ function promptValue(_string) # rechecked #TODO: Triple-check
 #    return var
 end
 
-println("#------ mini-DEMO start :")
-#mini-DEMO:
-println(promptValue("sth") )  # as string is given, tehre is no need for a readline()
+#--------
 
-println("#------ mini-DEMO ends!")
+# Checked
+function promptValue( var="0.0", _string="varName", escapeSequence = escapeSequence) # rechecked
 
-function promptValue(    var = 0.0, escapeSequence = escapeSequence) # rechecked
-
-    _string = ""
-
-    println("Please enter the variable's decimal value, or input an escapeSequence to quit program ")
+    #_string = ""
+    #var = 0.0
+    #println("Please enter the variable's decimal value, or input an escapeSequence to quit program ")
 
     # 1. Let User Input a value
     #_string= readline()
 
     # 2. If stirng was nothing(""), missing or input was a string Name
-    condition = isNullOrMissing( var) == true # ||  isaAlphaString(var) == true
+    condition = isNullOrMissing( var) # == true # ||  isaAlphaString(var) == true
     if condition == true
-        # Rewind for user input [restart function], as it cannot be missing
-        return promptValue() # reprompt input , from command line
+        #Do not rewind  Rewind for user input [restart function], as it cannot be missing
+        return  0.0#promptValue() # reprompt input , from command line
     # 3. otherwise, `_string` is neither nothing(""), missing or a string Name
     elseif condition == false  #isNullOrMissing(var ) == false && isaAlphaString(var) == false  # if input is valid
 
         # 4. Convert `_string` to a `Float64`
-        var = convertToFloat(_string)
-        return var
+    #    var = convertToFloat(var)
+    #    return var
 
-        var = convertToFloat(_string)
-        #_string = assignVariableToValue("variableName",var)
-        return var
+        var = convertToFloat(var)
+        _string = assignVariableToValue(_string,var)
+        return _string #var
     # Otherwise, at anytime, if user felt stuck, entered  one of the exit strings  to exit
     elseif lowercase(_string) in escapeSequence
         return exit() #   program exits the REPL....
@@ -1083,43 +979,8 @@ function promptValue(    var = 0.0, escapeSequence = escapeSequence) # rechecked
     return var
 end
 
+#--------
 
-function promptValue( stringName,   var = 0.0, escapeSequence = escapeSequence) # rechecked
-
-    _string = stringName #  ""
-
-    println("Please enter the variable's decimal value, or input an escapeSequence to quit program ")
-
-    # 1. Let User Input a value
-    #_string= readline()
-
-    # 2. If stirng was nothing(""), missing or input was a string Name
-    condition = isNullOrMissing( var) == true # ||  isaAlphaString(var) == true
-    if condition == true
-        # Rewind for user input [restart function], as it cannot be missing
-        return promptValue() # reprompt input , from command line
-    # 3. otherwise, `_string` is neither nothing(""), missing or a string Name
-    elseif condition == false  #isNullOrMissing(var ) == false && isaAlphaString(var) == false  # if input is valid
-
-        # 4. Convert `_string` to a `Float64`
-        var = convertToFloat(_string)
-        return var
-
-        var = convertToFloat(_string)
-        # _string = assignVariableToValue(stringName , var)
-        return var # _string
-    # Otherwise, at anytime, if user felt stuck, entered  one of the exit strings  to exit
-    elseif  _string in escapeSequence # #in  not isa lowercase(_string) in escapeSequence
-        return exit() #   program exits the REPL....
-
-    else
-        throw(error(msg))
-    end
-
-    return var
-end
-
-println(promptValue(100) )
 
 #checkInputIsValidOrRewind()
 
@@ -1275,48 +1136,56 @@ println("End, DEBUG")
 
 global usedStringNames = []
 
-## promptVarName()
-"""  prompts for user input, if valid , transform it to a decimal value
-!!!note: Assumes a valid variable name has already been set """#lvl5
-function promptVarName(escapeSequence = escapeSequence) # rechecked
 
-    var = ""
+""" prompts & handles user's entered `varName`
+for a given `varName`, check for null or missing
+""" # preferred
+function promptVarName(var= "varName" , escapeSequence=escapeSequence) # rechecked #TODO: trimSpaces()
 
-    #1. Prompt user for input, then read the input
-    println("Please enter _string's decimal value ") # was $_string
-    var= readline()
-
-    # 2. If string was nothing(""), missing, or input was NOT a string Name
-    if isNullOrMissing(var) == true #|| isaAlphaString(var) == false
+    # take care of the Floating Number:
+    # 1. If string was nothing(""), missing, or input was NOT a string Name
+    if isNullOrMissing(var) == true #<--- var was null"" or missing
+        # Handle it:
         #var = checkHandleDecimalInput(var) #WARNING: `var` can be `nothing ` #<------
-        # rewind Program
-        #counter-stackOverFlow mechanism: re-Prompt user for input
-        println("Retry: previous input invalid! Please enter a valid _string's decimal value: ")
-        _stringName = readline()
-        var = promptVarName(_stringName) # call the other function (with 1 compulsory argument )
-        var = handleNullName(var )
-        #var = trimSpaces(var) #TODO: later
+        # stackOverFlow counter-mechanism, do something different, i.e.
 
-        return var
-    #3. if it's valid
-    elseif isNullOrMissing(var) == false #&& isaAlphaString(var) == true
-        # do nothing major (auxilliary functions allowewd )
-        #trim spackes around the number , if any
-        var = trimSpaces(var)
-        # convert string represenation into a floating number
-        var = convertToFloat(var)
-        return var
+        return " "
+        #println("previous input is invalid! Rewind the function? [ (Y)es/(N)o ]")
 
+        #=
+        # To prevent an unncessary Infinite loop, Kindly Ask User if They want to Rewind with Options: [Y, yes , OR N, no ]
+        _string = readline()
+        # Handle the Null decimal value `var`
+        isNull = handleNullName(var) # !!!note: all spaces are trimmed, automatically
 
-    # Otherwise, if  it's an escape sequence
+        varName = processEmptyVariableName(isNull) #done
+
+        #handle a valid [Y]es / [N]o Question
+        response = checkYesOrNo(varName) #<---
+
+        # handle the user-given response for Rewinding ([Y]es / [N]o), passing-in the handeled `var` value
+        response = handleResponse(response, var, promptVarName)
+
+        return var #response #var
+        =#
+    #2. if it's valid
+    elseif isNullOrMissing(var) == false #|| isaAlphaString(var) == true
+            # do nothing
+
+            #var = trimSpaces(var)
+            println("Not NULL or Missing <Input is Valid>: varName  = ",var) # var = totalAssets
+            return var
+
+    # Otherwise, if  it's an escape sequence, User wants to Exit...
     elseif var in escapeSequence
-        var = exit() # program exits the REPL
+        var = exit() # Program exits the REPL
         return var
+    # Otherwise, it's an error
     else
         throw(error(msg))
     end
 
-    return var
+    #return var
 end
 
 
@@ -1324,56 +1193,6 @@ println("DEBUG: PROMPTVAR() = ")
 promptVarName()
 println("DEBUG: END ")
 
-""" prompts & handles user's entered `varName`
-for a given `varName`, check for null or missing
-"""
-function promptVarName(var = "", escapeSequence=escapeSequence) # rechecked #TODO: trimSpaces()
-
-    #println("Please enter _string's decimal value ") # was $_string
-    #var= readline()
-    #=
-        _stringName  ="variableName"
-        if ! isNull(var)
-            _stringName = var
-        end
-    =#
-
-    # take care of the Floating Number:
-    # 1. If string was nothing(""), missing ( or input was NOT a string Name )
-    if isNullOrMissing(var) == true #|| isaAlphaString(var) == false #--------
-        #var = checkHandleDecimalInput(var) #WARNING: `var` can be `nothing ` #<------
-        # rewind Program
-        #stackOverFlow counter-mechanism, do something different, i.e.
-        println("Retry: previous input is invalid! Rewinding program... ")
-        #var = readline()
-        #
-        var = promptVarName(escapeSequence) # call the other function (with no arguments )
-        return var
-    #2. if it's valid
-        elseif isNullOrMissing(var) == false #|| isaAlphaString(var) == true
-            # do nothing
-
-            #var = trimSpaces(var) TODO:
-            #2.1 Display it's a valid string
-            println("Not NULL or Missing <Input Valid> var = ",var) # var = totalAssets
-
-            #2.2 convert the given string to a floating point
-            var = convertToFloat(var)
-            #3. return variable `var`
-
-            return var
-
-    # Otherwise, if  it's an escape sequence [User wants to exit the REPL]
-    elseif var in escapeSequence
-        var = exit() # program exits the REPL
-
-    # otherwise, other inputs would be rendered as a User mistake: Warn user, by throwing `error`
-    else
-        throw(error(msg))
-    end
-
-    return var
-end
 
 
 #DEMO:
@@ -1907,33 +1726,36 @@ end
 #Note:  < assumes spaces on the side has already been dealth with >
 
 *   1. Locate a space , get its location
-*   2. Increment by 1 , there should be another character
-*   3. UppperCase the character, at that Position (i.e `.uppperCase()`)
+*   2. Increment by 1 , there should be another character (i.e. not a space )
+*   3. UppperCase the character, at that Position (i.e `.uppercase()`)
 
 """
 function setStringVar(stringInput) # readString -> setString
+
     #stringInput = "stringInput"
     println(" $prompt $stringInput")
+
     #1. ReadLine from user
     stringInput =  readline() #tryparse(Float64, input("$prompt " + decimalVal(stringInput,2)+"\n"))
-    #@2. Handle nothing("") or missing, if any
+
+    #2. Handle nothing("") or missing (if any)
     stringInput = handleNullOrMissing(stringInput)
+
     #3. Trim spaces
     stringInput = trimSpaces(stringInput)
 
-    #4. Assign value to var,  Assuming: Input is meaningful (refers to a meaningful name )
-    var1 =  assignVariableToValue(stringInput) #string_as_varname(stringInput)
+    #4. Assign value to var,  Assuming: Input is meaningful (refers to a meaningful name ) #cannot, only prompted user for (1) value
+    #TODO:comment Line # var1 =  assignVariableToValue(stringInput, _value) #was @string_as_varname(stringInput, _value)
 
-    return var1
+    return stringInput  # return `stringInput` only (instead of var1)
 
 end
 
 
 
-# Example:
+# DEMO - Example - [note: there is something `funny` about using `rstrip`, `lstrip`] # TODO: Comment it
 
 _str = "sample string "
-
 _str = rstrip(_str)
 println("_str", _str)
 _str = lstrip(_str)
@@ -1950,9 +1772,9 @@ println("_str", _str)
 #----
 #TODO: refactor complete program here ...
 """
-totalAssets = passmissing(readString)
-totalCapital =  passmissing(readString).
-totalLiabilities = passmissing(readString).
+totalAssets =  #passmissing(readString)
+totalCapital = # passmissing(readString).
+totalLiabilities = #passmissing(readString).
 
 sales, earnings, retainedEarnings = calcsales_earnings()
 #TODO: calculate z
@@ -2017,105 +1839,155 @@ end
 """ sets a corresponding variable name, from a string input """
 function setVariable()
 
-    variable  = 0.0
-    #variable  =  #initVar()
+    plsMsg = "please enter"
+    println("$plsMsg a variable name ")
 
     variable = promptVarName()# prompt variable using the string's value
+
+    println("$plsMsg a variable value ")
 
     var  = promptValue()
     variable = assignVariableToValue(variable, var)
     #checkResponse()
     return variable
+
+
+    variableName = handleNullName(_string)
+    variableName = trimSpaces(variableName) #corrected
+
+    _value = handleNullValue(varValue)
+
+    _value = convertToFloat(_value)
+
+    variableName = assignVariableToValue(variableName, _value )
+
+    variableName
 end
-""" sets a corresponding variable name, from a string input """
-## setVariable(_string="varName")
+
+""" creates a new variable from `_string` , and prompts user to input a  `varValue` to `_string` variable
+"""
 function setVariable(_string="varName") #updated
 
-    var  = 0.0 #initVar() #0.0
-    #variable  = initVar()
 
     #variable= promptVarName(_string) #"$_string")# prompt variable using the string's value
     variable = handleNullName(_string)
+    variable = trimSpaces(variable) #corrected
 
-    var  = promptValue(var,variable)#TODO:
-    var = handleNullValue(var)
+    _value = promptValue(variable )
+    _value = handleNullValue(_value)
+    _value = convertToFloat(_value)
 
-    variable = assignVariableToValue(@Name(variable), var) #<---- given variable Nothing
-    #checkResponse()
-    return variable
+    variable = assignVariableToValue(variable, _value )
+
+    variable
+
 end
 
-# setVariable(_string, var)
-""" sets a variable, from a string & a `var` """
-function setVariable(_string, var)#TODO:Recheck
+## setVariable(_string="varName", varValue = "50")
 
-    #variable  = 0.0
-    variable  = 0.0 # initVar()
+""" creates a new variable from `_string` , and assigns `varValue` to `_string`
+"""
+function setVariable(_string , varValue)  #_string="varName", varValue = "50") #updated #TODO:
 
-    variable = promptVarName(_string) #"$_string")# prompt variable using the string's value
-    variable = handleNullName(variable )
-    #_value = promptValue()
-    _value = handleNullValue(var)#<------
-    #checkResponse()
-    variable = assignVariableToValue(variable, _value)
-    return variable
+
+    #variable= promptVarName(_string) #"$_string")# prompt variable using the string's value
+    variableName = handleNullName(_string)
+    variableName = trimSpaces(variableName) #corrected
+
+    _value = handleNullValue(varValue)
+
+    _value = convertToFloat(_value)
+
+    variableName = assignVariableToValue(variableName, _value )
+
+    variableName
+
 end
+
 
 #DEMO: createVariable(_string)
 setVariable("Cash",100) #compiles # createVariable
 
 
-
 #--- Altman Coefficients a1, a2, ..., an
-#assets : read assets
 
-# calcCapital
+#--- marketCapital
 
-"""calculate the `marketCapital` (not the book Capital) = outstanding shares * stockPrice """
-function calcCapital() #compiles
+# promptMarketCapital
 
-     Stockprice =  setVariable("stockprice")  #toDecimalVal("stock Price")  #total Assets") #readString("total Assets") #passmissing(parse).(Float64, input("$prompt 'total Assets'\n"))
-    #totalCapital =  #passmissing(parse).(Float64, input("$prompt 'total Capital'\n"))
+"""prompts user to input the `marketCapital` variables  (not the book Capital):
+1. stockPrice
+2. sharesOutstanding """
 
-    sharesOutstanding =  setVariable("sharesOutstanding") # toDecimalVal("outstanding shares")  # readString("total Liabilities")
-    capital = totalAssets - totalLiabilities  # Capital
-    totalAssets, totalLiabilities, capital
+function promptMarketCapital(stockPrice = "stockPrice", sharesOutstanding = "sharesOutstanding") #compiles
+
+    # 1. set `marketCapital` variables
+    stockPrice =  setVariable(stockPrice)
+    sharesOutstanding =  setVariable(sharesOutstanding)
+
+    # 2. concatenate them into a vector
+    _vector = [stockPrice, sharesOutstanding]
+    _vector
 end
 
 
-#calcsales_earnings
 
-"""Prompts user to enter: Sales,  Earnings  & Retained Earnings  (of a company)
-values are converted to `Float64` then returned """
+function getMarketCapital(stockPrice, outstandingShares, outstandingSharesName="outstandingShares", stockPriceName = "stockPrice")
 
-function calcsales_earnings()
+        # 1. set `marketCapital` variables
+        #outstandingShares = setVariable(outstandingSharesName) #createVariable(outstandingShares)
+        #stockPrice =  setVariable(stockPriceName) # createVariable(stockPrice)
+        _vector = promptMarketCapital(outstandingSharesName, stockPriceName)
+        # 2. concatenate them into a vector
+        _vector = [outstandingShares, stockPrice ]
 
-    sales =  toDecimalVal("Sale") #readString("Sale") #passmissing(parse).(Float64, input("$prompt 'Sales'\n"))
-    earnings = toDecimalVal("Earnings") #readString("Earnings") #passmissing(parse).(Float64, input("$prompt 'Earnings'\n"))
-    retainedEarnings = toDecimalVal("Retained Earnings") #readString("Retained Earnings") #passmissing(parse).(Float64, input("$prompt 'Retained Earnings'\n"))
-
-    sales, earnings, retainedEarnings #(sales, earnings, retainedEarnings)
+        # 3. return result
+        _vector
 
 end
 
-#global sales
-#global ebit
-#global retainedEarnings
 
-function getSalesEarnings()
+## getMarketCapital(stockPrice, outstandingShares, outstandingSharesName="outstandingShares", stockPriceName = "stockPrice")
 
-    println("getSalesEarnings")
+""" returns a vector of newly set `marketCapital` variables """
+function getMarketCapital(stockPrice, outstandingShares, outstandingSharesName="outstandingShares", stockPriceName = "stockPrice")
 
-    sales = setVariable("Sales")
-    ebit = setVariable("EBIT")
-    retainedEarnings = setVariable("RetainedEarnings")
+        # 1. set `marketCapital` variables
+        _vector = promptMarketCapital()
 
-    #sales = toDecimalVal("Sale") #readString("Sale") #passmissing(parse).(Float64, input("$prompt 'Sales'\n"))
-    #earnings = toDecimalVal("EBIT") #readString("Earnings") #passmissing(parse).(Float64, input("$prompt 'Earnings'\n"))
-    #retainedEarnings = toDecimalVal("RetainedEarnings") #readString("Retained Earnings") #passmissing(parse).(Float64, input("$prompt 'Retained Earnings'\n"))
-    _vector  = [sales, earnings, retainedEarnings]
-    return _vector #sales, earnings, retainedEarnings #(sales, earnings, retainedEarnings)
+        # 2. concatenate them into a vector
 
+        _vector = [outstandingShares, stockPrice ]
+
+        # 3. return result
+        _vector
+    end
+end
+
+
+""" performs point-wise Multiplication with each element in vector input `_vectorMarketCapital`  """
+function calcMarketCapital(_marketVector)
+
+    #multiply all its elements, the get back  the total figure
+    Mul(_marketVector)
+end
+
+
+
+
+""" Allow user to input sales variables
+1. sales
+2. EBIT
+3. retainedEarnings
+
+"""
+function promptSalesEarnings(sales = "sales",ebit = "ebit", retainedEarnings = "retainedEarnings")
+    sales =  setVariable(sales)
+    ebit = setVariable(ebit)
+    retainedEarnings = setVariable(retainedEarnings)
+
+    vSales= [sales, ebit, retainedEarnings] #(sales, earnings, retainedEarnings)
+    vSales
 end
 
 """ Reads input string variables , prompts user to input decimals, assigns variables
@@ -2135,23 +2007,11 @@ Output:
 """
 function getSalesEarnings(sales="sales", ebit="ebit", retainedEarnings="retainedEarnings") #_string="SalesEarnings")  #sales,ebit retainedEarnings)
 
-    # println(_string)
+    vSales = promptSalesEarnings()
 
-    sales =  setVariable(sales) #createVariable(sales)
-    ebit = setVariable(ebit) #createVariable(ebit)
-    retainedEarnings = setVariable(retainedEarnings) #setVariable createVariable(retainedEarnings)
-
-    #UncommentMe:
-    vSales= [sales, ebit, retainedEarnings] #(sales, earnings, retainedEarnings)
-
-    #sales = toDecimalVal("Sale") #readString("Sale") #
-    #earnings = toDecimalVal("EBIT") #readString("Earnings")
-    #retainedEarnings = toDecimalVal("RetainedEarnings") #readString("Retained Earnings")
-
-    return vSales #sales, ebit, retainedEarnings #vSales
+    vSales #[ sales, ebit, retainedEarnings ] #vSales
 
 end
-
 
 """ Calculates total sales """
 function calcSalesEarnings(vEarnings)
@@ -2242,16 +2102,16 @@ end
 
 #1. Prompt User for input
 println("setVariable:")
-totalAssets = setVariable("totalAssets") #createVariable("totalAssets",1000) # <------
+totalAssets = setVariable("totalAssets")
 totalAssets = setVariable("totalAssets",1000) #<------- # createVariable
 
 println("totalAssets", totalAssets)
 println("end of setVariable")
 
 #vSales = getSalesEarnings("sales", "ebit", "retainedEarnings")
-sales =  setVariable("sales") #createVariable(sales)
-ebit = setVariable("ebit") #createVariable(ebit)
-retainedEarnings = setVariable("retainedEarnings") #setVariable createVariable(retainedEarnings)
+sales =  setVariable("sales")
+ebit = setVariable("ebit")
+retainedEarnings = setVariable("retainedEarnings") #setVariable
 
 # sales,ebit,retainedEarnings = handleNullValue(vSales[1]) , handleNullValue(vSales[2]), handleNullValue(vSales[3])
 sales,ebit,retainedEarnings = handleNullValue(sales), handleNullValue(ebit), handleNullValue(retainedEarnings)
@@ -2400,20 +2260,19 @@ function getCurrentLiabilities(notesPayable="notesPayable",accountsPayable="acco
 
     println("DEBUG: getCurrentLiabilities: ")
 
-    notesPayable =  setVariable(notesPayable) #createVariable(notesPayable)
+    notesPayable =  setVariable(notesPayable)
 
-    accountsPayable = setVariable(accountsPayable) #createVariable(accountsPayable)
+    accountsPayable = setVariable(accountsPayable)
 
-    accruedExpense = setVariable(accruedExpense) #createVariable(accruedExpense)
+    accruedExpense = setVariable(accruedExpense)
 
-    #unearnedRevenue = initVar()
+    unearnedRevenue = setVariable(unearnedRevenue)
 
-    unearnedRevenue = setVariable(unearnedRevenue) # createVariable(unearnedRevenue)
-
-    longtermDebt = setVariable(longtermDebt) #createVariable(longtermDebt)
+    longtermDebt = setVariable(longtermDebt)
 
     _vector = [notesPayable, accountsPayable, accruedExpense, unearnedRevenue, longtermDebt]
-    return _vector
+
+    _vector
 
 end
 
@@ -2423,15 +2282,15 @@ function getCurrentLiabilities1(floatVar=[142, 261, 175, 154, 168], stringVar=["
 
     notesPayable = stringVar[1]; accountsPayable = stringVar[2]; accruedExpense = stringVar[3]; unearnedRevenue = stringVar[4]; longtermDebt = stringVar[5]
 
-    notesPayable = setVariable(notesPayable, floatVar[1]) #notesPayable) #createVariable(notesPayable)
+    notesPayable = setVariable(notesPayable, floatVar[1]) #notesPayable)
 
-    accountsPayable = setVariable(accountsPayable,floatVar[2]) #accountsPayable) #createVariable(accountsPayable)
+    accountsPayable = setVariable(accountsPayable,floatVar[2]) #accountsPayable)
 
-    accruedExpense = setVariable(accruedExpense, floatVar[3]) #accruedExpense) #createVariable(accruedExpense)
+    accruedExpense = setVariable(accruedExpense, floatVar[3]) #accruedExpense)
 
-    unearnedRevenue = setVariable(unearnedRevenue, floatVar[4]) #unearnedRevenue) # createVariable(unearnedRevenue)
+    unearnedRevenue = setVariable(unearnedRevenue, floatVar[4]) #unearnedRevenue)
 
-    longtermDebt = setVariable(longtermDebt, floatVar[5]) #createVariable(longtermDebt)
+    longtermDebt = setVariable(longtermDebt, floatVar[5])
 
     _vector = [notesPayable, accountsPayable, accruedExpense, unearnedRevenue, longtermDebt]
     return _vector
@@ -2443,11 +2302,11 @@ end
 #TODO:Recheck
 function getCurrentLiabilities(floatValues=[142, 261, 175, 154, 168], stringNames=["notesPayable","accountsPayable","accruedExpense","unearnedRevenue","longtermDebt"])
 
-    #notesPayable =  setVariable(notesPayable) #createVariable(notesPayable)
-    #accountsPayable = setVariable(accountsPayable) #createVariable(accountsPayable)
-    #accruedExpense = setVariable(accruedExpense) #createVariable(accruedExpense)
-    #unearnedRevenue = setVariable(unearnedRevenue)  #createVariable(unearnedRevenue)
-    #longtermDebt = setVariable(longtermDebt) #createVariable(longtermDebt)
+    #notesPayable =  setVariable(notesPayable)
+    #accountsPayable = setVariable(accountsPayable)
+    #accruedExpense = setVariable(accruedExpense)
+    #unearnedRevenue = setVariable(unearnedRevenue)
+    #longtermDebt = setVariable(longtermDebt)
     #conditionEquality = areDimsEqual(stringNames,floatValues)
 
     _listCurrentLiabilities = []
@@ -2491,7 +2350,7 @@ end
 
 function getTotalLiabilities( totalLiabilites= "totalLiabilities")
 
-    totalLiabilites =  setVariable(totalLiabilites) #createVariable(_string)
+    totalLiabilites =  setVariable(totalLiabilites)
 
     return totalLiabilites
 
@@ -2503,23 +2362,6 @@ end
 #currentLiabilities = getCurrentLiabilities([142, 261, 175, 154, 168]) #-------
 
 #----------
-
-#--- marketCapital
-
-## getMarketCapital(outstandingShares, stockPrice)
-function getMarketCapital(outstandingShares="outstandingShares", stockPrice = "stockPrice")
-
-    outstandingShares = setVariable(outstandingShares) #createVariable(outstandingShares)
-    stockPrice =  setVariable(stockPrice) # createVariable(stockPrice)
-    _vector = [outstandingShares, stockPrice ]
-    return _vector
-end
-
-
-""" performs point-wise Multiplication with each element in vector input `_vectorMarketCapital`  """
-function calcMarketCapital(_vectorMarketCapital)
-    return Mul(_vectorMarketCapital) #<-----------
-end
 
 #=
 """
@@ -2536,77 +2378,7 @@ end
 
 ## getCurrentAssets
 
-###   getCurrentAssets1(vFloat, vCAssets )
-"""
-takes a string, assigns it a value, creats a variable, then appends it to a `vCurrentAssets` list
-
-for each element in current assets:
-Cash, accountsReceivable, inventory, securities commercialPaper, treasuryNotes, other
-instead of  prompting them from the user
-
-""" #WARNING: includes many mini-functions
-
-function getCurrentAssets1(vFloat = [100, 150 , 120, 89, 50, 220, 75],
-    vCAssets = ["cash", "accountsReceivable","inventory",
-    "securities","commercialPaper","treasuryNotes","other"]) # includes many mini-functions
-
-    #1. Cash
-    cash = createVariable(vCAssets[1],vFloat[1]);
-
-    #2. accountsReceivable
-    accountsReceivable  =  setVariable(vCAssets[2], vFloat[2]) #createVariable(accountsReceivable, vFloat[2]) #setVariable("accountsReceivable")
-
-    #3. inventory
-    inventory = setVariable(vCAssets[3], vFloat[3])  #createVariable(inventory,vFloat[3]) #setVariable("inventory")
-    #4. securities
-    securities = setVariable(vCAssets[4], vFloat[4]) #setVariable("securities")
-    #5. commercialPaper
-    commercialPaper = setVariable(vCAssets[5], vFloat[5]) #setVariable("commercialPaper")
-    #6. treasuryNotes
-    treasuryNotes = setVariable(vCAssets[6], vFloat[6]) #setVariable("treasuryNotes")
-    #7. other
-    other = setVariable(vCAssets[7], vFloat[7]) #setVariable("other")
-
-    # create a list for the variables
-    vCurrentAssets = [cash, accountsReceivable , inventory , securities , commercialPaper, treasuryNotes, other]
-
-    # return the vector list of variables
-    return vCurrentAssets
-
-end
-
-
-## getCurrentAssets2(floatValues, stringNames)
-""" takes a vector of string names, & another for float values; returns a vector of current Asset Variables """
-
-function getCurrentAssets2(floatValues=[100.25,120.50, 200.75, 150.75, 100.50, 60.50, 90.00], assetNames=["cash", "accountsReceivable","inventory",
-    "securities", "commercialPaper","treasuryNotes","other"]) #useful
-
-    conditionEquality = areDimsEqual(assetNames ,floatValues)
-    _listCurrentAssetVariables = []
-
-    vCurrentAssets = []
-    index = 0
-    if conditionEquality == true
-        for _ in assetNames # as easy as 1,2,3:
-
-            #1. Increment the index, by (1) One
-            index = index + 1
-            #2. Create a new variable from string in vCAssets & float in vFloat vectors, accordingly
-            varCurrentAsset =  setVariable(assetNames[index],floatValues[index]) # create a variable
-
-            #3. Append: the `varCurrentAsset` into the `vCurrentAssets` vector list
-            append!(vCurrentAssets,   varCurrentAsset )
-        end
-    end
-
-    vCurrentAssets
-
-end
-
-
-## getCurrentAssets(vCurrentAssetsPrice, vCurrentAssets)
-
+## getCurrentAssets(vCurrentAssetsPrices, vCurrentAssets)
 
 """ Checks input vectors, if equal, it creates an element-wise variable from each input
 ```
@@ -2615,25 +2387,27 @@ Output:
 - _listVariables: list of variables
 ```
 """
-
-function getCurrentAssets(vCurrentAssetsPrice, vCurrentAssets ) # = [100.25,120.50, 200.75, 150.75, 100.50, 60.50, 90.00],  = [cash,accountsReceivable,inventory,securities,
+function getCurrentAssets(vCurrentAssetsPrices, vCurrentAssets=["cash","accountsReceivable","Inventory","Securities","commercialPaper",
+    "treasuryNotes","Other"] ) # = [100.25,120.50, 200.75, 150.75, 100.50, 60.50, 90.00],  = [cash,accountsReceivable,inventory,securities,
     #commercialPaper,treasuryNotes,other]) # <---
 
-    conditionEquality = areDimsEqual(vCurrentAssets,vCurrentAssetsPrice)
+    conditionEquality = areDimsEqual(vCurrentAssets,vCurrentAssetsPrices)
     _listVariables = []
 
+    # 1. check dimensional equality condition
     if conditionEquality == true
-        index = 0
 
-        for _ in vCurrentAssets
+        #2. loop all the vector (of names and prices ) , set then append to list
+        for i in 1:length(vCurrentAssets)
 
-            index = index + 1
-            var = setVariable( vCurrentAssets[index], vCurrentAssetsPrice[index]) # createVariable
-            _listVariables = append!( _list, var )
+            var = setVariable( vCurrentAssets[i], vCurrentAssetsPrices[i])
+            _listVariables = append!( _listVariables, var )
 
         end
     end
-    return _listVariables
+
+    # 3. return list
+    _listVariables
 
 end
 
@@ -2661,22 +2435,23 @@ Sums up & gets the total of every variable, in a vector list & returns `currentA
      Assets  = CurrentAsset ( is a concept, less than the  bussiness's set year timespan) + non-current Asset (more than  bussiness's set timespan  )
 
 """
-function calcCurrentAssets(vCurrentAssets) # = [cash,accountsReceivable,inventory,securities,commercialPaper,treasuryNotes,other]) #, vCurrentAssetsPrice = [100,120, 200, 150, 100, 60, 90]) #a
+function calcCurrentAssets(vCurrentAssets) #  [cash,accountsReceivable,inventory,securities,commercialPaper,treasuryNotes,other])
 
     totalCurrentAssets = Sum(vCurrentAssets)
 
-    #Instead of
-    #totalCurrentAssets = cash+accountsReceivable + inventory + securities +commercialPaper+treasuryNotes+other
-
-    return totalCurrentAssets
+    totalCurrentAssets
 
 end
+
+
+#e.g.
+# vCurrentAssetsPrices = [100,120, 200, 150, 100, 60, 90])
 
 
 # calcCurrentAssets(vCurrentAssets)
 """
 !!!Note:
-Assets  = CurrentAsset ( is a concept, less than the  bussiness's set year timespan) + non-current Asset (more than  bussiness's set timespan  )
+ CurrentAsset ( is a concept, which spans for  less than the  bussiness's set year timespan  )
 """
 function calcCurrentAssets(vCurrentAssets) # [cash, accountsReceivable,inventory,securities,commercialPaper,treasuryNotes,other]
 
@@ -2684,7 +2459,7 @@ function calcCurrentAssets(vCurrentAssets) # [cash, accountsReceivable,inventory
 
     currentAssets = Sum(vCurrentAssets)
 
-    currentAssets # , nonCurrentAssets
+    currentAssets
 
 end
 
@@ -2692,14 +2467,41 @@ end
 #DEMO : currentAssets
 println("calcCurrentAssets")
 
-# Demo : getCurrentAssets - > getCurrentAssets1(), getCurrentAssets2()
-
-_vector = getCurrentAssets1() # DEBUGS # [100, 200, 140, 150, 120, 140,120]
 # _vector = getCurrentAssets2() # [100, 200, 140, 150, 120, 140,120]
+_vector = getCurrentAssets([100.25,120.50, 200.75, 150.75, 100.50, 60.50, 90.00])
 
 currentAssets = calcCurrentAssets( _vector)   #[100, 200, 140, 150, 120, 140,120])
+println("currentAssets are equal to $currentAssets")
 
 
+function promptCurrentAssets(cash = "cash", accountsReceivable="accountsReceivable", inventory = "inventory", securities = "securities", commercialPaper = "commercialPaper",
+     treasuryNotes = "treasuryNotes", other = "other") #cAssetNames=["cash","accountsReceivable"])
+
+    cash = setVariable(cash)
+    accountsReceivable = setVariable(accountsReceivable)
+    inventory = setVariable(inventory)
+    securities = setVariable(securities)
+    commercialPaper = setVariable(commercialPaper)
+    treasuryNotes = setVariable(treasuryNotes)
+    other = setVariable(other)
+
+    _vector = [cash,accountsReceivable,inventory, securities, commercialPaper,treasuryNotes,other]
+    _vector
+end
+
+""" sets and returns current Asset variables
+returns `currentAssets` figure"""
+function setReturnCurrentAssets()
+
+    # 1. prompt user, for input
+    _vector = promptCurrentAssets() #[cash,accountsReceivable,inventory, securities, commercialPaper,treasuryNotes,other]
+
+    # 2. calculate `currentAssets`
+    currentAssets = calcCurrentAssets( _vector)
+
+    # 3. return `currentAssets`
+    currentAssets
+end
 
 #--- totalAssets
 
@@ -2708,20 +2510,23 @@ currentAssets = calcCurrentAssets( _vector)   #[100, 200, 140, 150, 120, 140,120
 ## getTotalAssets(totalAssets = "totalAssets")
 
 """ prompt user to input totalAssets """
-function getTotalAssets(totalAssets = "totalAssets") #practica*+l
+function promptTotalAssets(totalAssets = "totalAssets") #practica*+l
 
     totalAssets = setVariable(totalAssets) #setVariable(totalAssets)
-     totalAssets
+
+    totalAssets
 end
 
 
 ## getTotalAssets(totalAssetsValue, totalAssets)
 
-function getTotalAssets(totalAssetsValue=1000.00, totalAssets = "totalAssets") # more practical
+function getTotalAssets(totalAssetsValue, totalAssets = "totalAssets") # more practical
 
     totalAssets = setVariable(totalAssets,totalAssetsValue) #setVariable(totalAssets)
     totalAssets
 end
+
+currentAssets = setReturnCurrentAssets()
 
 
 #----
@@ -2730,10 +2535,8 @@ end
 
 #Demo : getCurrentAssets
 # _vector = getCurrentAssets() # [100, 200, 140, 150, 120, 140,120] # ERROR: `accountsReceivable` is Undefined
-_vector = getCurrentAssets1()
 
-
-currentAssets = calcCurrentAssets( _vector)   #[100, 200, 140, 150, 120, 140,120]) getCurrentAssets(vCurrentAssetsPrice = [100.25,120.50, 200.75, 150.75, 100.50, 60.50, 90.00], vCurrentAssets=[cash,accountsReceivable,inventory,securities,
+currentAssets = calcCurrentAssets( _vector)   #[100, 200, 140, 150, 120, 140,120]) getCurrentAssets(vCurrentAssetsPrices = [100.25,120.50, 200.75, 150.75, 100.50, 60.50, 90.00], vCurrentAssets=[cash,accountsReceivable,inventory,securities,
 #    commercialPaper,treasuryNotes,other]) #a
 
 #currentAssets = getCurrentAssets2() #input("please enter 'Current Assets' ") # not functioning, as expected
@@ -2960,24 +2763,40 @@ end
 
 """
 
+function getTotalLiabilities(liabilitiesName = "totalLiabilites")
 
-function getLiabilities(notesPayable="notesPayable",accountsPayable="accountsPayable",
+    totalLiabilites = setVariable(liabilitiesName)
+    totalLiabilites
+end
+
+function promptCurrentLiabilities(notesPayable="notesPayable",accountsPayable="accountsPayable",
     accruedExpense = "accruedExpense", unearnedRevenue="unearnedRevenue",longtermDebt="longtermDebt")
 
-    notesPayable = createVariable(notesPayable) #setVariable("notesPayable")
-    accountsPayable = createVariable(accountsPayable) #setVariable("accountsPayable")
-    accruedExpense = createVariable(accruedExpense) #setVariable("accruedExpense")
-    unearnedRevenue = createVariable(unearnedRevenue) #setVariable("unearnedRevenue")
-    longtermDebt = createVariable(longtermDebt) #setVariable("longtermDebt")
+    notesPayable = setVariable(notesPayable) #setVariable("notesPayable")
+    accountsPayable = setVariable(accountsPayable) #setVariable("accountsPayable")
+    accruedExpense = setVariable(accruedExpense) #setVariable("accruedExpense")
+    unearnedRevenue = setVariable(unearnedRevenue) #setVariable("unearnedRevenue")
+    longtermDebt = setVariable(longtermDebt) #setVariable("longtermDebt")
 
     vLiabilities = [notesPayable, accountsPayable,
  accruedExpense,unearnedRevenue,longtermDebt]
 
-    return vLiabilities
+    vLiabilities
 end
 
+function getCurrentLiabilities(notesPayable="notesPayable",accountsPayable="accountsPayable",
+    accruedExpense = "accruedExpense", unearnedRevenue="unearnedRevenue",longtermDebt="longtermDebt")
 
-liabilities = getLiabilities() # prompt user to insert liabilities
+    vLiabilities = promptCurrentLiabilities(notesPayable, accountsPayable,
+ accruedExpense,unearnedRevenue,longtermDebt)
+
+    vLiabilities
+
+end
+
+# DEMO : getCurrentLiabilities()
+
+liabilities = getCurrentLiabilities() # prompt user to insert liabilities
 #liabilities = [notesPayable,accountsPayable,accruedExpense,unearnedRevenue,longtermDebt]
 #calcLiabilities
 Sum(liabilities)
@@ -3007,11 +2826,8 @@ function calcCurrentLiabilities( vLiabilities)# [notesPayable,accountsPayable,ac
     if isNull(vLiabilities)
         throw(error(msg))
     end
-    currentLiabilities = Sum(vLiabilities)
 
-    #    notesPayable , accountsPayable , accruedExpense , unearnedRevenue , longtermDebt = currentLiabilities()
-    #currentLiabilities = abs(notesPayable) + abs(accountsPayable) + abs(accruedExpense) + abs(unearnedRevenue) + abs(longtermDebt)
-    #currentLiabilities = notesPayable + accountsPayable +  accruedExpense + unearnedRevenue + alongtermDebt
+    currentLiabilities = Sum(vLiabilities)
 
     currentLiabilities
 
@@ -3043,9 +2859,10 @@ outputs:
 # An alternative way of currentAssets: prompt only for currentAssets
 function getCurrentAssets(currentAssets = "currentAssets") #DONE
 
-    # null -double check
-    cAssets = setVariable(currentAssets) #createVariable(currentAssets)
-return cAssets
+
+    cAssets = setVariable(currentAssets)
+    cAssets
+
 end
 
 # calcCurrentAssets(vCurrentAssets)
@@ -3111,7 +2928,7 @@ vCurrentLiabilities = getCurrentLiabilities([142, 261, 175, 154, 168])
 totalCurrentLiabilities = calcCurrentLiabilities(vCurrentLiabilities)
 
 totalLiabilites = getTotalLiabilities("totalLiabilites")
-totalAssets = getTotalAssets("totalAssets")
+totalAssets = setReturnTotalAssets("totalAssets")
 
 currentAssets = _vectorAssets # getCurrentAssets2([100, 200, 140, 150, 120, 140,120]) # prompt user for more input # <---------------
 
@@ -3127,7 +2944,7 @@ workingCapital = calcWorkingCapital(cAssets , cLiabilities ) # done
 #x1Ratio = X1(workingCapital, totalAssets ) #TODO: UncommentMe
 
 
-vSales,ebit, retainedEarnings = getSalesEarnings("sales", "ebit", "retainedEarnings")
+vSales,ebit, retainedEarnings = getSalesEarnings() #"sales", "ebit", "retainedEarnings")
 
 totalSales = calcSalesEarnings(vSales) # WARNING: unused
 
@@ -3136,11 +2953,11 @@ totalSales = calcSalesEarnings(vSales) # WARNING: unused
 
 #x3Ratio = X3(ebit, totalLiabilities)
 
-_vector = getMarketCapital()
+_vector = getMarketCapital(10,100)
 
 marketCapital = calcMarketCapital(_vector) #Mul(_vector) # outstanding shares * current Stockprice = marketCapital
 
-totalDebt = setVariable("totalDebt") #setVariable createVariable("totalDebt")
+totalDebt = setVariable("totalDebt") #setVariable
 
 #x4Ratio = X4(marketCapital,totalDebt )
 
@@ -3264,63 +3081,61 @@ function getWorkingCapital() # practical
     or it could be Negative (liabilities > assets )
 
     """
-    #cassets > cliabilities ?
+    #(Is) cassets > cliabilities ?
+
     workingCapital = initVar() # 0.00
 
-    workingCapital = Sum(currentAssets()) - Sum(currentLiabilities() )
+    workingCapital = promptCurrentAssets() - promptCurrentLiabilities()
 
-    return workingCapital
-end # returns workingCapital
+    workingCapital
+end
+
+
+function getWorkingCapital(currentAssets, currentLiabilities) # more practical
+    """
+    getWorkingCapital():
+    current Assets - current Liabilites
+
+    workingCapital could be positive (assets > liabilities)
+    or it could be Negative (liabilities > assets )
+
+    """
+    #(Is) cassets > cliabilities ?
+
+    #workingCapital = initVar() # 0.00
+
+    workingCapital =  currentAssets - currentLiabilities  # Sum(currentAssets()) - Sum(currentLiabilities() )
+
+    workingCapital
+end
 
 
 # calcWorkingCapital(cAssets, cLiabilities)
 """
-WorkingCapital():
-current Assets - current Liabilites
+WorkingCapital(cAssets, cLiabilities):
+calculates the difference `current Assets - current Liabilites`
 
-workingCapital could be positive (assets > liabilities)
-or it could be Negative (liabilities > assets )
+!!!Note:  `workingCapital` could be:
+1. Positive (`assets` > `liabilities`), or it could be
+2. Negative (liabilities > assets )
 
 """
-function calcWorkingCapital(cAssets, cLiabilities)
+function calcWorkingCapital( _vec #cAssets, cLiabilities) #
 
-
-    workingCapital = initVar() # 0.00
+    #workingCapital = initVar() # 0.00
 
     workingCapital = cAssets  - cLiabilities #@currentAssets() - currentLiabilities()
 
-    return workingCapital
-end # returns workingCapital
+    workingCapital
+
+end
 
 
 #--- functions
 
 # Liabilities
 
-## getLiabilities
-function getLiabilities() #WARNING: unused
-    """
-    calculates current, non-current liabilities
-    Accounts
-    ```
-    inputs:
-    Nothing
-    !!! note: prompts user for input 2 values:
-        -currentLiabilities
-        -noncurrentliabs
-    ```
-    """
-
-    currentLiabilities = getCurrentLiabilities([142, 261, 175, 154, 168]) #done
-    currentLiabilities = calcCurrentLiabilities(currentLiabilities)
-
-    #noncurrentliabs = createVariable(noncurrentliabs) #setVariable(noncurrentliabs) # prompt user, for input
-
-    currentLiabilities #, noncurrentliabs
-
-end
-
-#end  of Assets -----
+# end  of Assets -----
 
 function altmanCoeffs()
 
@@ -3340,16 +3155,17 @@ function altmanCoeffs()
 end
 
 
-function main()
-    print("welcome to Altman z-score - Julia Edition!\n")
 
+function main()
+
+    print("welcome to Altman z-score - Julia Edition!\n")
     println("Please enter the variable's decimal value, or input an escapeSequence to quit program ")
 
 
 # Assets
 # total Assets  = total capital - total Liabilities
 # totalAssets = getTotalAssets(TotalLiabilities,totalCapital) # standard accounting equation
-totalAssets = convertToFloat( getTotalAssets() )  # let the user pick a value
+totalAssets = convertToFloat( setReturnTotalAssets() )  # let the user pick a value
 
 #currentAssets
 CurrentAssets = getCurrentAssets([100,210,100,50,110,50,10]) #read input & returns a tuple
@@ -3359,7 +3175,7 @@ totalCurrentAssets =  calcCurrentAssets(CurrentAssets) # detuple inside
 #calcnonCurrentAssets(nonCurrentAssets)
 
 # currentLiabilities demo
-# getLiabilities() #no such thing should exist
+# getCurrentLiabilities() #no such thing should exist
 
 # liabilities
 
@@ -3485,15 +3301,8 @@ function read()
     return [totalAssets, totalLiabilites, EBIT, totalDebt  , stockPrice, stockPrice,sharesOutstanding,  retainedEarnings, sales ]
 end
 
-# getTotalAssets()
-
-function getTotalAssets()
-    totalAssets = setVariable("totalAssets")
-    totalAssets
-end
-
 #get
-totalAssets = handleNullName( getTotalAssets() )
+totalAssets = handleNullName( setReturnTotalAssets() )
 #=
 # getworkingCapital()
 
@@ -3526,13 +3335,23 @@ function X5(sales, totalAssets )
     return result
 end
 
+""" Adds up the `currentAssets` vector """
+function calcCurrentAssets(currentAssets)
+    Sum(currentAssets)
+end
+
+""" adds up the `currentLiabilities` vector """
+function calcCurrentLiabilities(currentLiabilities)
+    Sum(currentLiabilities)
+end
+
 #DEMO: calculating altman's Cutt-off Z, by Calculating the 5 Accounting Ratios:
 
 # Possible dimension missmatch
 #ERROR: totalAssets = Nothing
 
 # X1 = working Capital / total assets # Current Assets without current Liabilities / total Assets
-x1 = calcworkingCapital(Sum(currentAssets),sum(currentLiabilities)) #/ totalAssets #lambda:  = workingCapital() / totalAssets
+x1 = calcworkingCapital(calcCurrentAssets(currentAssets),calcCurrentLiabilities(currentLiabilities))/totalAssets #/ totalAssets #lambda:  = workingCapital() / totalAssets
 
 # X2 =  retainedEarnings, totalAssets  = retainedEarnings/ retainedEarnings
 x2 =   retainedEarnings / totalAssets #lambda:  =  retainedEarnings / totalAssets
@@ -3541,7 +3360,7 @@ x2 =   retainedEarnings / totalAssets #lambda:  =  retainedEarnings / totalAsset
 x3 = EBIT / totalAssets #lambda:  =  earnings / totalAssets
 
 x4 = marketCapital/totalDebt #X4()  # or   marketEquity / totalDebt #lambda:  =  marketcapital) / totalDebt
-x5 = X5(sales,totalAssets)  #TODO: DEBUG
+x5 =   #TODO: DEBUG
 
 # X5 = sales / totalAssets
 
@@ -3580,9 +3399,12 @@ end
 + (Capital*totalAssets) /totalLiabilites + Sales/to alt
 =#
 
-#--- Z cutt-off Handling
+#--- Altman's Z cut-off Handling
 
-function z_handling(z) # TODO: check Implementation
+# evaluateZ
+
+function evaluateZ(z)
+    decision = " "
     if z < 1.18 # Below: Less `Assets` more `Liabilities`
         decision = "Distress"
 
@@ -3592,8 +3414,10 @@ function z_handling(z) # TODO: check Implementation
     elseif z > 2.99 # Above: more `Assets`, less `Liabilities` -> more likely to be in the Safe Zone
         decision = "Safe Zone"
     else end
- return z, decison
+ return z, decision
 end
+
+#-------
 
 """ user is prompted to enter all required values for calculating the Input vector of x's """
 function inputUser()
@@ -3611,6 +3435,11 @@ function inputUser()
 
 
 end
+
+# calcAltmanRatios(_list)
+
+#Processing I
+##Processing I.I
 
 #println("Checking List:\n", _list = [(workingCapital, totalAssets), (retainedEarnings,totalAssets), (earnings, totalAssets), (capital, totalLiabilities)])
 #println(_list[1])
@@ -3634,7 +3463,7 @@ function calcAltmanRatios(_list) # [workingCapital,totalAssets,retainedEarnings,
     sales = _list[_first + 7]
 
 
-    x1 = X1(_list[_first], _list[_first +1]) #workingCapital,totalAssets) #req:working capital
+    x1 = X1(workingCapital, totalAssets) #workingCapital,totalAssets) #req:working capital
     #+a2 *
     x2 =  X2( retainedEarnings,totalAssets)  #retainedEarnings,totalAssets)
     #+ a3 *
@@ -3647,20 +3476,108 @@ function calcAltmanRatios(_list) # [workingCapital,totalAssets,retainedEarnings,
      return ratioVector
 end
 
+##Processing I.II
+function calcAltmanRatios(currentAssets, currentLiabilities, totalAssets, retainedEarnings, EBIT, stockPrice, sharesOutstanding, totalDebt, sales)
+
+
+    #calcAltmanRatios() : from `currentAssets`, `currentLiabilities` figures
+    workingCapital = calcWorkingCapital(currentAssets,currentLiabilities)
+
+    x1 = workingCapital / totalAssets
+
+    x2 = retainedEarnings /  totalAssets
+
+    x3 = EBIT / totalAssets
+
+    #getMarketCapital(stockPrice, sharesOutstanding)
+
+    # MarketCapital processing: from `stockPrice` & `sharesOutstanding`
+    marketCapital = getMarketCapital(stockPrice, sharesOutstanding)
+    marketCapital = calcMarketCapital(marketCapital)
+
+    x4 = marketCapital / totalDebt
+
+    x5 =  sales / totalAssets
+
+    #concatenate ratios , reducing input into an `X` vector
+    vectorRatios = [x1,x2,x3,x4,x5]
+
+    vectorRatios
+
+end
+
+#!!!Note: currentAssets might be found in relation to other variables
+#Processing II
+""" uses the `9 input`  of application-level variables   """
+function calcAltman(currentAssets, currentLiabilities, totalAssets, retainedEarnings, EBIT, stockPrice, sharesOutstanding,  totalDebt, sales )
+    # this function expects final terminal values to be entered
+
+    #1. currentAssets
+    #2. currentLiabilities
+    #3. retainedEarnings
+    #4. EBIT
+
+    # marketCapital ((market) stockPrice , sharesOutstanding )
+    # 5.stockPrice
+    #6. sharesOutstanding
+    #7. totalDebt
+    #8. sales
+    #9. totalAssets
+
+    #that makes up the financial ratios of interest :
+    #x1 = working capital (currentAssets - currentLiabilities) / totalAssets
+    #x2 =
+
+    #calcWorkingCapital()
+
+    #calcAltmanRatios()
+    vectorRatios = calcAltmanRatios(currentAssets, currentLiabilities, totalAssets, retainedEarnings, EBIT, stockPrice, sharesOutstanding, totalDebt, sales)
+
+    #=
+    workingCapital = calcWorkingCapital(currentAssets,currentLiabilities)
+
+    x1 = workingCapital / totalAssets
+
+    x2 = retainedEarnings /  totalAssets
+
+    x3 = EBIT / totalAssets
+
+    #getMarketCapital(stockPrice, sharesOutstanding)
+
+    #getMarketCapital()
+    marketCapital = getMarketCapital(stockPrice, sharesOutstanding)
+
+    x4 = marketCapital / totalDebt
+
+    x5 =  sales / totalAssets
+
+    #return X = [x1,x2,x3,x4,x5]
+    =#
+
+    # _inVector = vectorRatios # [x1,x2,x3,x4,x5]
+
+    altmanZ = processAltman(vectorRatios)
+
+    altmanZ
+
+end
+
 
 """" Processing III: get input _in , _weights , perform Algebriac Vector multiplication
 i.e.  _in' * _weights , & return  the Output"""
 function processAltman(_in = [0.3, 0.4 , 0.2, 0.1, 0.5], _weights=[1.2 , 1.4 , 3.3 , 0.6 , 0.999 ]) # [x1, x2,x3,x4,x5]
 
     try
-        #1. check whether both vectors are of same length
+        #1. Check whether both vectors are of same length
         condition  = areDimsEqual(_in, _weights)
 
         #condition =  copy( length(_in) == length(_weights)) # or try `deepcopy`
+        #2. Pre-set the `result` vector, with zeros
         result = zeros(length(_in))
 
         if !condition  # if lengths are NOT Equal
             println("Input Dimensions are not equal, please check input, then try again later  ")
+            #zeros vector is expected
 
         elseif condition # if lengths are Equal
 
@@ -3691,6 +3608,8 @@ function processAltman(_in = [0.3, 0.4 , 0.2, 0.1, 0.5], _weights=[1.2 , 1.4 , 3
     end
 
 end
+
+
 #--- Output
 
 # for a given weights
