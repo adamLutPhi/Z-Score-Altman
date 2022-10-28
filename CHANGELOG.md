@@ -135,7 +135,7 @@ Updated condition to allow either `nothing` or `""`  as `null`
 - `string_as_varname_macro`: renamed to `macro_string_as_varname`
 - `assignVariableToValue`: uses `macro_string_as_varname`
 
-10-18-2022
+#10-18-2022
 
 ## add
 
@@ -150,13 +150,33 @@ which lets the user easily re-invoke the function, with possibly a valid input, 
 - `handleResponse()` added a third input argument `kernel` to pass in the corresponding function, either `promptVarName`
 or even possibly `promptValue`
 
-10-20-2022
+#10-20-2022
 
 ## update
 
-`isNull`: condition logic been updated
-& checked in `demo2`
+- `isNull`: condition logic been updated ( checked, in `demo2`)
+
 
 - `trimSpaces`: corrected condition (recheck is required)
 
-- `main.jl` runs withou Error  
+- `main.jl`: runs without Error  
+
+
+#10-25-2022
+
+## update
+
+-  `setVariable`: to replace the current variable Creation function
+it thas two (2) function variations :
+1. `setVariable(_string)`: creates a variable from `_string`, prompts user to input the variable's decimal value
+2. `setVariable(_string, varValue)`: creates a variable from `_string`, assigns the decima `varValue` to variable `_string`
+
+- `Mul(_vector)`: corrected iteration condition
+
+- `z_handling`: renamed into a more meaningfully Suitable one `evaluateZ`
+
+# 10-27-2022
+
+## update
+
+- `checkInputIsValidOrRewind`
