@@ -1,4 +1,10 @@
+#=
+companies.jl
+
+Author = @adamwillisMastery ('Ahmad Lutfi')
+=#
 include("main.jl")
+
 
 #Demo for `crackerBarrel`
 
@@ -6,8 +12,7 @@ function demo1(cash =45105, accountsReceivable = 32246, inventory = 213249 ,secu
      notesPayable = 0.0 , accountsPayable= 169871 , accruedExpense = 0 , unearnedRevenue =0  ,longtermDebt=423249,
      totalAssets = 2294911 )
 
-    CurrentAssets = getCurrentAssets([cash, accountsReceivable  ,inventory, securities,commercialPaper, treasuryNotes ,other])
-    #currentLiabilities = getCurrentLiabilities()
+    CurrentAssets = getCurrentAssets([cash, accountsReceivable  ,inventory, securities,commercialPaper, treasuryNotes ,other]) #currentLiabilities = getCurrentLiabilities()
 
     currentLiabilities = getCurrentLiabilities([notesPayable, accountsPayable, accruedExpense, unearnedRevenue, longtermDebt])
 
